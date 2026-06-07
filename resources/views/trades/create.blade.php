@@ -667,12 +667,14 @@
     }
 
     function validateBrokerFields() {
-        const flexToken = document.getElementById('flex-token').value.trim();
-        const queryId = document.getElementById('query-id').value.trim();
+        const flexTokenEl = document.getElementById('flex-token');
+        const queryIdEl = document.getElementById('query-id');
+        // Fallback to HTML attribute in case browser cleared the password field's .value
+        const flexToken = (flexTokenEl.value || flexTokenEl.getAttribute('value') || '').trim();
+        const queryId = (queryIdEl.value || queryIdEl.getAttribute('value') || '').trim();
         const saveBtn = document.getElementById('save-credentials-btn');
         const importBtn = document.getElementById('import-trades-btn');
-        
-        // Enable buttons only if both fields are filled
+
         const isValid = flexToken.length > 0 && queryId.length > 0;
         saveBtn.disabled = !isValid;
         importBtn.disabled = !isValid;
@@ -1143,14 +1145,12 @@
         document.getElementById('pnl-formula').textContent = formulaText;
     }
 
-    // Validate broker fields on page load to enable buttons if credentials are already saved
+    // Enable buttons on load if the user already has saved broker credentials
     document.addEventListener('DOMContentLoaded', function() {
-        // Check if we're on auto-import tab and validate fields
-        const flexToken = document.getElementById('flex-token');
-        const queryId = document.getElementById('query-id');
-        
-        if (flexToken && queryId && (flexToken.value || queryId.value)) {
-            validateBrokerFields();
+        const hasSavedCredentials = {{ ($user->ib_flex_token && $user->ib_query_id) ? 'true' : 'false' }};
+        if (hasSavedCredentials) {
+            document.getElementById('save-credentials-btn').disabled = false;
+            document.getElementById('import-trades-btn').disabled = false;
         }
     });
 </script>

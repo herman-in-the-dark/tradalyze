@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
@@ -16,7 +17,8 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('auth.login');
+        $rememberedEmail = Cookie::get('remembered_email', '');
+        return view('auth.login', compact('rememberedEmail'));
     }
 
     /**
@@ -42,6 +44,13 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             RateLimiter::clear($key);
             $request->session()->regenerate();
+
+            if ($request->boolean('remember')) {
+                Cookie::queue('remembered_email', $credentials['email'], 60 * 24 * 30); // 30 days
+            } else {
+                Cookie::queue(Cookie::forget('remembered_email'));
+            }
+
             return redirect()->intended(route('dashboard'));
         }
 
