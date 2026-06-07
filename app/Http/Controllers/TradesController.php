@@ -181,7 +181,20 @@ class TradesController extends Controller
             ->get()
             ->keyBy(fn($e) => $e->entry_date->format('Y-m-d'));
 
-        return view('trades', compact('groupedPositions', 'daysPaginator', 'totalDays', 'userTags', 'diaryEntryByDate'));
+        // Commissions per day from ledger (commission + fee entries)
+        $commissionsByDate = collect();
+        if ($closedDateSlice->isNotEmpty()) {
+            $commissionsByDate = \App\Models\Ledger::whereHas('instrument', function ($q) {
+                    $q->where('user_id', auth()->id());
+                })
+                ->whereIn('type', ['commission', 'fee'])
+                ->whereIn(DB::raw('DATE(datetime)'), $closedDateSlice->toArray())
+                ->selectRaw('DATE(datetime) as trade_date, SUM(ABS(amount)) as total_commission')
+                ->groupBy('trade_date')
+                ->pluck('total_commission', 'trade_date');
+        }
+
+        return view('trades', compact('groupedPositions', 'daysPaginator', 'totalDays', 'userTags', 'diaryEntryByDate', 'commissionsByDate'));
     }
 
     public function create()

@@ -1,9 +1,9 @@
-FROM php:8.4-fpm
+FROM php:8.4-fpm-bullseye
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies
+# Install system dependencies (no nodejs/npm from apt — we'll install Node 20 below)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -15,12 +15,15 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     libsqlite3-dev \
     nginx \
-    supervisor \
-    nodejs \
-    npm
+    supervisor
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20 (LTS) via NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
@@ -30,7 +33,6 @@ RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
 ENV APP_NAME=Tradalyze \
     APP_ENV=production \
     APP_DEBUG=false \
-    APP_URL=http://localhost \
     LOG_LEVEL=error \
     DB_CONNECTION=sqlite \
     DB_DATABASE=/var/www/html/database/database.sqlite \

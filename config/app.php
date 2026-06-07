@@ -54,6 +54,14 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    // Force https:// in all generated URLs (set automatically by entrypoint
+    // when APP_URL starts with https://, or set FORCE_HTTPS=true in .env).
+    'force_https' => env('FORCE_HTTPS', false),
+
+    // Proxies to trust for X-Forwarded-* headers.
+    // * = trust all (suitable for containers behind a reverse proxy).
+    'trusted_proxies' => env('TRUSTED_PROXIES', '*'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

@@ -8,8 +8,7 @@ services:
     image: tradalyze:latest
     container_name: tradalyze_app
     restart: unless-stopped
-    ports:
-      - "8080:80"
+    network_mode: host
     volumes:
       - ./database:/var/www/html/database
       - ./storage:/var/www/html/storage
@@ -24,8 +23,7 @@ services:
       - DB_DATABASE=/var/www/html/database/database.sqlite
       - SESSION_DRIVER=database
       - QUEUE_CONNECTION=database
-    networks:
-      - tradalyze_network
+
 
   # Optional: MySQL database (uncomment if you prefer MySQL over SQLite)
   # mysql:
@@ -41,10 +39,6 @@ services:
   #     - mysql_data:/var/lib/mysql
   #   networks:
   #     - tradalyze_network
-
-networks:
-  tradalyze_network:
-    driver: bridge
 
 # Uncomment if using MySQL
 # volumes:
