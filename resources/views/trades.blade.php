@@ -353,7 +353,7 @@
 
             <div class="flex items-center gap-3 flex-1 min-w-0 border-l-4 {{ $borderColorClass }} pl-4 py-4">
                 <svg data-chevron="{{ $groupId }}"
-                     class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 rotate-90"
+                     class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -440,7 +440,7 @@
             @endif
 
             {{-- Trade Rows Table --}}
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto hidden" id="{{ $groupId }}-trades">
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-100">
@@ -727,11 +727,11 @@ function changePerPage(value) {
 }
 
 function toggleDay(groupId) {
-    const body    = document.getElementById(groupId + '-body');
+    const trades  = document.getElementById(groupId + '-trades');
     const chevron = document.querySelector('[data-chevron="' + groupId + '"]');
-    if (!body) return;
-    const collapsed = body.classList.contains('hidden');
-    body.classList.toggle('hidden', !collapsed);
+    if (!trades) return;
+    const collapsed = trades.classList.contains('hidden');
+    trades.classList.toggle('hidden', !collapsed);
     if (chevron) chevron.style.transform = collapsed ? 'rotate(90deg)' : 'rotate(0deg)';
 }
 
