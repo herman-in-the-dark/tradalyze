@@ -727,6 +727,45 @@ class TradesController extends Controller
         }
     }
 
+    public function bulkTag(Request $request)
+    {
+        $request->validate([
+            'position_ids'   => 'required|array|min:1',
+            'position_ids.*' => 'integer|exists:positions,id',
+            'tag_ids'        => 'required|array|min:1',
+            'tag_ids.*'      => 'integer|exists:trade_tags,id',
+        ]);
+
+        if (Position::whereIn('id', $request->position_ids)
+                ->whereHas('instrument', fn($q) => $q->where('user_id', '!=', auth()->id()))
+                ->exists()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        if (TradeTag::whereIn('id', $request->tag_ids)
+                ->where('user_id', '!=', auth()->id())
+                ->exists()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        try {
+            DB::beginTransaction();
+            $positions = Position::whereIn('id', $request->position_ids)->get();
+            foreach ($positions as $position) {
+                $position->tags()->syncWithoutDetaching($request->tag_ids);
+            }
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Applied ' . count($request->tag_ids) . ' tag(s) to ' . count($request->position_ids) . ' trade(s).',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function attachTag(Position $position, TradeTag $tag)
     {
         // Ensure user owns this position and tag

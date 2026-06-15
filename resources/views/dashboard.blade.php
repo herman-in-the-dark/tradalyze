@@ -4,19 +4,19 @@
 
 @section('content')
 <div class="mb-8">
-    <h2 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h2>
-    <p class="text-gray-600">Welcome to your trading dashboard</p>
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard</h2>
+    <p class="text-gray-600 dark:text-gray-400">Welcome to your trading dashboard</p>
 </div>
 
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-    <div class="group relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-200 dark:bg-blue-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-blue-600 text-xs font-semibold uppercase tracking-wide mb-2">Total Trades</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ number_format($totalTrades) }}</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($totalTrades) }}</h3>
                     <div class="mt-2 flex items-center text-xs text-blue-600">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -33,13 +33,13 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-green-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950 dark:to-emerald-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-green-200 dark:bg-green-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-green-600 text-xs font-semibold uppercase tracking-wide mb-2">Winning Trades</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ number_format($winningTrades) }}</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($winningTrades) }}</h3>
                     <div class="mt-2 flex items-center text-xs text-green-600">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -56,13 +56,13 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-red-50 to-rose-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-red-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-950 dark:to-rose-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-red-200 dark:bg-red-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-red-600 text-xs font-semibold uppercase tracking-wide mb-2">Losing Trades</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ number_format($losingTrades) }}</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ number_format($losingTrades) }}</h3>
                     <div class="mt-2 flex items-center text-xs text-red-600">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -79,13 +79,13 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-orange-50 to-amber-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-950 dark:to-amber-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-200 dark:bg-orange-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-orange-600 text-xs font-semibold uppercase tracking-wide mb-2">Win Rate</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ $winRate }}%</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $winRate }}%</h3>
                     <div class="mt-2 flex items-center text-xs text-orange-600">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
@@ -103,8 +103,8 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-emerald-50 to-teal-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-emerald-950 dark:to-teal-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-200 dark:bg-emerald-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
@@ -126,8 +126,8 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-rose-50 to-pink-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-rose-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-rose-50 to-pink-100 dark:from-rose-950 dark:to-pink-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-rose-200 dark:bg-rose-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
@@ -149,8 +149,8 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-purple-50 to-violet-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950 dark:to-violet-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-200 dark:bg-purple-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
@@ -172,8 +172,8 @@
         </div>
     </div>
     
-    <div class="group relative bg-gradient-to-br from-cyan-50 to-sky-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-200 rounded-full -mr-16 -mt-16 opacity-30"></div>
+    <div class="group relative bg-gradient-to-br from-cyan-50 to-sky-100 dark:from-cyan-950 dark:to-sky-900/80 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 p-6 overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-200 dark:bg-cyan-900/50 rounded-full -mr-16 -mt-16 opacity-30"></div>
         <div class="relative">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
@@ -198,39 +198,39 @@
 
 <!-- Performance Analytics -->
 <div class="mb-8">
-    <h3 class="text-xl font-bold text-gray-900 mb-4">Performance Analytics</h3>
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Performance Analytics</h3>
 
     <!-- Row 1: Key metrics -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
 
         <!-- Profit Factor -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Profit Factor</p>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Profit Factor</p>
             <p class="text-3xl font-bold {{ (is_numeric($profitFactor) && $profitFactor >= 1) || $profitFactor === '∞' ? 'text-emerald-600' : 'text-red-600' }}">{{ $profitFactor }}</p>
-            <p class="text-xs text-gray-400 mt-2">Gross Profit ÷ Gross Loss</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Gross Profit ÷ Gross Loss</p>
         </div>
 
         <!-- Avg Winner -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Avg Winner</p>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Avg Winner</p>
             <p class="text-3xl font-bold text-emerald-600">+${{ number_format($avgWinner, 2) }}</p>
-            <p class="text-xs text-gray-400 mt-2">Per winning trade</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Per winning trade</p>
         </div>
 
         <!-- Avg Loser -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Avg Loser</p>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Avg Loser</p>
             <p class="text-3xl font-bold text-red-600">-${{ number_format($avgLoser, 2) }}</p>
-            <p class="text-xs text-gray-400 mt-2">Per losing trade</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Per losing trade</p>
         </div>
 
         <!-- Current Streak -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Current Streak</p>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Current Streak</p>
             <p class="text-3xl font-bold {{ $currentStreakIsWin ? 'text-emerald-600' : 'text-red-600' }}">
                 {{ $currentStreakDisplay > 0 ? $currentStreakDisplay . ($currentStreakIsWin ? 'W' : 'L') : '—' }}
             </p>
-            <p class="text-xs text-gray-400 mt-2">Best: {{ $maxWinStreak }}W &nbsp;|&nbsp; Worst: {{ $maxLossStreak }}L</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Best: {{ $maxWinStreak }}W &nbsp;|&nbsp; Worst: {{ $maxLossStreak }}L</p>
         </div>
     </div>
 
@@ -238,45 +238,45 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
 
         <!-- Best Day -->
-        <div class="bg-emerald-50 rounded-xl shadow p-6">
+        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl shadow p-6">
             <p class="text-xs text-emerald-600 uppercase tracking-wide mb-1">Best Day</p>
             <p class="text-2xl font-bold text-emerald-600">
                 @if($bestDayPnl !== null) +${{ number_format($bestDayPnl, 2) }} @else — @endif
             </p>
-            <p class="text-xs text-gray-500 mt-2">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 @if($bestDayDate) {{ \Carbon\Carbon::parse($bestDayDate)->format('M d, Y') }} @endif
             </p>
         </div>
 
         <!-- Worst Day -->
-        <div class="bg-red-50 rounded-xl shadow p-6">
+        <div class="bg-red-50 dark:bg-red-900/20 rounded-xl shadow p-6">
             <p class="text-xs text-red-600 uppercase tracking-wide mb-1">Worst Day</p>
             <p class="text-2xl font-bold text-red-600">
                 @if($worstDayPnl !== null) ${{ number_format($worstDayPnl, 2) }} @else — @endif
             </p>
-            <p class="text-xs text-gray-500 mt-2">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 @if($worstDayDate) {{ \Carbon\Carbon::parse($worstDayDate)->format('M d, Y') }} @endif
             </p>
         </div>
 
         <!-- Best Month -->
-        <div class="bg-emerald-50 rounded-xl shadow p-6">
+        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl shadow p-6">
             <p class="text-xs text-emerald-600 uppercase tracking-wide mb-1">Best Month</p>
             <p class="text-2xl font-bold text-emerald-600">
                 @if($bestMonthPnl !== null) +${{ number_format($bestMonthPnl, 2) }} @else — @endif
             </p>
-            <p class="text-xs text-gray-500 mt-2">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 @if($bestMonth) {{ \Carbon\Carbon::parse($bestMonth . '-01')->format('M Y') }} @endif
             </p>
         </div>
 
         <!-- Worst Month -->
-        <div class="bg-red-50 rounded-xl shadow p-6">
+        <div class="bg-red-50 dark:bg-red-900/20 rounded-xl shadow p-6">
             <p class="text-xs text-red-600 uppercase tracking-wide mb-1">Worst Month</p>
             <p class="text-2xl font-bold text-red-600">
                 @if($worstMonthPnl !== null) ${{ number_format($worstMonthPnl, 2) }} @else — @endif
             </p>
-            <p class="text-xs text-gray-500 mt-2">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 @if($worstMonth) {{ \Carbon\Carbon::parse($worstMonth . '-01')->format('M Y') }} @endif
             </p>
         </div>
@@ -284,22 +284,22 @@
 
     <!-- Win Rate by Tag -->
     @if($winRateByTag->isNotEmpty())
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h4 class="text-lg font-semibold text-gray-900 mb-4">Win Rate by Tag</h4>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Win Rate by Tag</h4>
         <div class="space-y-3">
             @foreach($winRateByTag as $tag)
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2" style="width:9rem;">
                     <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: {{ $tag['color'] ?? '#6b7280' }};"></div>
-                    <span class="text-sm font-medium text-gray-700 truncate">{{ $tag['name'] }}</span>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{{ $tag['name'] }}</span>
                 </div>
                 <div class="flex-1">
-                    <div class="flex h-2.5 rounded-full overflow-hidden bg-gray-100">
+                    <div class="flex h-2.5 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
                         <div class="bg-emerald-500 transition-all duration-500" style="width: {{ $tag['win_rate'] }}%;"></div>
                         <div class="bg-red-400 transition-all duration-500" style="width: {{ 100 - $tag['win_rate'] }}%;"></div>
                     </div>
                 </div>
-                <div class="flex items-center gap-3 text-xs text-gray-500" style="min-width:10rem;">
+                <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400" style="min-width:10rem;">
                     <span class="font-semibold text-emerald-600">{{ $tag['win_rate'] }}%</span>
                     <span>{{ $tag['wins'] }}W / {{ $tag['losses'] }}L</span>
                     <span class="font-medium {{ $tag['pnl'] >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
@@ -316,69 +316,69 @@
 <!-- Account Balance & P&L History Charts (50/50 Split) -->
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
     <!-- Account Balance History Chart -->
-    <div class="bg-gradient-to-br from-indigo-50 to-blue-100 rounded-xl shadow-lg p-6">
+    <div class="bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-indigo-900/20 dark:to-blue-800/20 rounded-xl shadow-lg p-6">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-900">Account Balance History</h3>
-                <p class="text-xs text-gray-600 mt-1">Track your account growth over time</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Account Balance History</h3>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Track your account growth over time</p>
             </div>
             <div class="text-right">
-                <p class="text-xs text-gray-600 uppercase tracking-wide mb-1">Current</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">Current</p>
                 <p class="text-2xl font-bold {{ $accountBalance >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
                     ${{ number_format($accountBalance, 2) }}
                 </p>
             </div>
         </div>
-        
+
         <!-- Line Chart Container -->
-        <div class="relative bg-white rounded-lg p-4" style="height: 350px;">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg p-4" style="height: 350px;">
             <canvas id="accountBalanceChart"></canvas>
         </div>
-        
+
         <!-- Legend -->
         <div class="mt-4 flex justify-center gap-4 text-xs">
             <div class="flex items-center">
                 <div class="w-3 h-3 rounded mr-2" style="background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);"></div>
-                <span class="text-gray-700 font-medium">Balance</span>
+                <span class="text-gray-700 dark:text-gray-300 font-medium">Balance</span>
             </div>
             @if($balanceHistory['startingBalance'] > 0)
                 <div class="flex items-center">
                     <div class="w-3 h-3 bg-gray-400 rounded mr-2"></div>
-                    <span class="text-gray-700">Start: ${{ number_format($balanceHistory['startingBalance'], 2) }}</span>
+                    <span class="text-gray-700 dark:text-gray-300">Start: ${{ number_format($balanceHistory['startingBalance'], 2) }}</span>
                 </div>
             @endif
         </div>
     </div>
-    
+
     <!-- Net P&L History Chart -->
-    <div class="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-xl shadow-lg p-6">
+    <div class="bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-emerald-900/20 dark:to-teal-800/20 rounded-xl shadow-lg p-6">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-900">Net Profit & Loss</h3>
-                <p class="text-xs text-gray-600 mt-1">Cumulative profit vs loss from trades</p>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Net Profit & Loss</h3>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Cumulative profit vs loss from trades</p>
             </div>
             <div class="text-right">
-                <p class="text-xs text-gray-600 uppercase tracking-wide mb-1">Net</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">Net</p>
                 <p class="text-2xl font-bold {{ ($netProfit - $netLoss) >= 0 ? 'text-emerald-600' : 'text-red-600' }}">
                     ${{ number_format($netProfit - $netLoss, 2) }}
                 </p>
             </div>
         </div>
-        
+
         <!-- Line Chart Container -->
-        <div class="relative bg-white rounded-lg p-4" style="height: 350px;">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg p-4" style="height: 350px;">
             <canvas id="netPnLChart"></canvas>
         </div>
-        
+
         <!-- Legend -->
         <div class="mt-4 flex justify-center gap-4 text-xs">
             <div class="flex items-center">
                 <div class="w-3 h-3 bg-emerald-500 rounded mr-2"></div>
-                <span class="text-gray-700 font-medium">Profit: ${{ number_format($netProfit, 2) }}</span>
+                <span class="text-gray-700 dark:text-gray-300 font-medium">Profit: ${{ number_format($netProfit, 2) }}</span>
             </div>
             <div class="flex items-center">
                 <div class="w-3 h-3 bg-red-500 rounded mr-2"></div>
-                <span class="text-gray-700 font-medium">Loss: ${{ number_format($netLoss, 2) }}</span>
+                <span class="text-gray-700 dark:text-gray-300 font-medium">Loss: ${{ number_format($netLoss, 2) }}</span>
             </div>
         </div>
     </div>
@@ -387,9 +387,9 @@
 <!-- Main Content Grid -->
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
     <!-- Daily P&L Bar Chart for Current Month -->
-    <div class="bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl shadow-lg p-6">
+    <div class="bg-gradient-to-br from-slate-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg p-6">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-semibold text-gray-900">Daily P&L - {{ now()->format('F Y') }}</h3>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Daily P&L - {{ now()->format('F Y') }}</h3>
         </div>
         
         <!-- Bar Chart Container -->
@@ -411,9 +411,9 @@
     </div>
 
     <!-- Calendar Widget -->
-    <div class="bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl shadow-lg p-6">
+    <div class="bg-gradient-to-br from-slate-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg p-6">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-semibold text-gray-900">Daily P&L Calendar</h3>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Daily P&L Calendar</h3>
         </div>
         
         <!-- FullCalendar Container -->
@@ -423,37 +423,37 @@
         <div class="mt-4 flex items-center justify-center space-x-4 text-xs">
             <div class="flex items-center space-x-1">
                 <div class="w-3 h-3 rounded" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);"></div>
-                <span class="text-gray-600">Profit</span>
+                <span class="text-gray-600 dark:text-gray-400">Profit</span>
             </div>
             <div class="flex items-center space-x-1">
                 <div class="w-3 h-3 rounded" style="background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);"></div>
-                <span class="text-gray-600">Loss</span>
+                <span class="text-gray-600 dark:text-gray-400">Loss</span>
             </div>
         </div>
     </div>
 
     <!-- Recent Activity -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h3>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
         @if($recentTrades->count() > 0)
             <div class="space-y-4">
                 @foreach($recentTrades as $trade)
-                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                         <div class="flex-1">
                             <div class="flex items-center space-x-3">
-                                <span class="text-sm font-bold text-gray-900">{{ $trade->instrument->symbol }}</span>
+                                <span class="text-sm font-bold text-gray-900 dark:text-white">{{ $trade->instrument->symbol }}</span>
                                 <span class="text-xs px-2 py-1 rounded-full {{ $trade->direction === 'long' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                     {{ strtoupper($trade->direction) }}
                                 </span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1">{{ $trade->quantity }} @ ${{ number_format($trade->average_price, 2) }}</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{ \Carbon\Carbon::parse($trade->close_datetime)->format('M d, Y h:i A') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $trade->quantity }} @ ${{ number_format($trade->average_price, 2) }}</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ \Carbon\Carbon::parse($trade->close_datetime)->format('M d, Y h:i A') }}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-lg font-bold {{ $trade->realized_pnl >= 0 ? 'text-green-600' : 'text-red-600' }}">
                                 {{ $trade->realized_pnl >= 0 ? '+' : '' }}${{ number_format($trade->realized_pnl, 2) }}
                             </p>
-                            <p class="text-xs text-gray-500">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ $trade->realized_pnl >= 0 ? 'Profit' : 'Loss' }}
                             </p>
                         </div>
@@ -472,28 +472,28 @@
     </div>
 
     <!-- Monthly P&L Panel (synced with calendar) -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <div class="flex items-center justify-between mb-5">
-            <h3 id="monthly-pnl-title" class="text-xl font-semibold text-gray-900">Monthly P&L</h3>
-            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1">
+            <h3 id="monthly-pnl-title" class="text-xl font-semibold text-gray-900 dark:text-white">Monthly P&L</h3>
+            <span class="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full flex items-center gap-1">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Synced with calendar
             </span>
         </div>
 
         <!-- Net P&L Headline -->
-        <div class="text-center mb-5 py-4 px-3 bg-gray-50 rounded-xl">
-            <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Net P&L</p>
+        <div class="text-center mb-5 py-4 px-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Net P&L</p>
             <p id="monthly-net-pnl" class="text-4xl font-bold text-gray-300">—</p>
         </div>
 
         <!-- Gross Profit / Loss -->
         <div class="grid grid-cols-2 gap-3 mb-4">
-            <div class="text-center p-3 bg-emerald-50 rounded-lg">
+            <div class="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                 <p class="text-xs text-emerald-600 uppercase tracking-wide mb-1">Gross Profit</p>
                 <p id="monthly-gross-profit" class="text-lg font-bold text-emerald-600">—</p>
             </div>
-            <div class="text-center p-3 bg-red-50 rounded-lg">
+            <div class="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                 <p class="text-xs text-red-600 uppercase tracking-wide mb-1">Gross Loss</p>
                 <p id="monthly-gross-loss" class="text-lg font-bold text-red-600">—</p>
             </div>
@@ -501,12 +501,12 @@
 
         <!-- Win/Loss Day Ratio Bar -->
         <div class="mb-4">
-            <div class="flex justify-between text-xs text-gray-500 mb-1">
+            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
                 <span id="monthly-win-days-label">0 win days</span>
                 <span id="monthly-win-rate-label" class="font-semibold">0%</span>
                 <span id="monthly-loss-days-label">0 loss days</span>
             </div>
-            <div class="flex h-2.5 rounded-full overflow-hidden bg-gray-100">
+            <div class="flex h-2.5 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
                 <div id="monthly-win-bar" class="bg-emerald-500 transition-all duration-500" style="width:0%"></div>
                 <div id="monthly-loss-bar" class="bg-red-400 transition-all duration-500" style="width:0%"></div>
             </div>
@@ -514,15 +514,15 @@
 
         <!-- Stat Chips -->
         <div class="grid grid-cols-3 gap-2 mb-4">
-            <div class="text-center p-2 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-400 mb-0.5">Trading Days</p>
-                <p id="monthly-trading-days" class="text-base font-bold text-gray-700">—</p>
+            <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Trading Days</p>
+                <p id="monthly-trading-days" class="text-base font-bold text-gray-700 dark:text-gray-200">—</p>
             </div>
-            <div class="text-center p-2 bg-emerald-50 rounded-lg">
+            <div class="text-center p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                 <p class="text-xs text-emerald-500 mb-0.5">Win Days</p>
                 <p id="monthly-win-days" class="text-base font-bold text-emerald-600">—</p>
             </div>
-            <div class="text-center p-2 bg-red-50 rounded-lg">
+            <div class="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
                 <p class="text-xs text-red-500 mb-0.5">Loss Days</p>
                 <p id="monthly-loss-days" class="text-base font-bold text-red-600">—</p>
             </div>
@@ -530,15 +530,15 @@
 
         <!-- Best / Worst Day -->
         <div class="grid grid-cols-2 gap-3">
-            <div class="p-3 bg-emerald-50 rounded-lg">
+            <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                 <p class="text-xs text-emerald-600 uppercase tracking-wide mb-1">Best Day</p>
                 <p id="monthly-best-day" class="text-base font-bold text-emerald-600">—</p>
-                <p id="monthly-best-day-date" class="text-xs text-gray-400 mt-0.5"></p>
+                <p id="monthly-best-day-date" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5"></p>
             </div>
-            <div class="p-3 bg-red-50 rounded-lg">
+            <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                 <p class="text-xs text-red-600 uppercase tracking-wide mb-1">Worst Day</p>
                 <p id="monthly-worst-day" class="text-base font-bold text-red-600">—</p>
-                <p id="monthly-worst-day-date" class="text-xs text-gray-400 mt-0.5"></p>
+                <p id="monthly-worst-day-date" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5"></p>
             </div>
         </div>
     </div>
@@ -1048,6 +1048,17 @@ function updateMonthlyStats(year, month) {
         border-radius: 0.5rem;
         padding: 1rem;
     }
+    .dark #pnl-calendar {
+        background: #1f2937;
+        color: #f3f4f6;
+    }
+    .dark #pnl-calendar .fc-toolbar-title { color: #f3f4f6 !important; }
+    .dark #pnl-calendar .fc-col-header-cell-cushion { color: #9ca3af; }
+    .dark #pnl-calendar .fc-daygrid-day-number { color: #d1d5db; }
+    .dark #pnl-calendar .fc-theme-standard td,
+    .dark #pnl-calendar .fc-theme-standard th { border-color: #374151; }
+    .dark #pnl-calendar .fc-day-today { background: rgba(59, 130, 246, 0.15) !important; }
+    .dark #pnl-calendar .fc-scrollgrid { border-color: #374151; }
     #pnl-calendar .fc-toolbar-title {
         font-size: 1.25rem !important;
         font-weight: 600;

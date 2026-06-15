@@ -10,10 +10,12 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     
+    <!-- Dark mode: apply class before CSS loads to prevent flash -->
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <aside id="sidebar" class="bg-gray-900 text-white fixed h-screen overflow-y-auto flex flex-col transition-all duration-300 z-40 md:w-64" style="width: 16rem;">
@@ -47,7 +49,17 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('diary') }}" 
+                        <a href="{{ route('trades.create') }}?tab=auto-import"
+                           class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 text-gray-400 hover:bg-gray-800 hover:text-white"
+                           title="Sync Trades">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            <span class="sidebar-text ml-3">Sync Trades</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('diary') }}"
                            class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('diary') ? 'bg-orange-600 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}"
                            title="Diary">
                             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,8 +82,23 @@
                 </ul>
             </nav>
             
-            <!-- Logout Button -->
+            <!-- Sidebar Footer: Dark Mode + Logout -->
             <div class="px-3 py-4 border-t border-gray-800">
+                <!-- Dark Mode Toggle -->
+                <button
+                    id="theme-toggle"
+                    onclick="toggleTheme()"
+                    class="sidebar-link flex items-center w-full px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all duration-200 mb-1"
+                    title="Toggle dark mode"
+                >
+                    <svg id="theme-icon-moon" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                    <svg id="theme-icon-sun" class="w-5 h-5 flex-shrink-0 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <span class="sidebar-text ml-3">Dark Mode</span>
+                </button>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="sidebar-link flex items-center w-full px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all duration-200" title="Logout">
@@ -100,7 +127,7 @@
         </button>
         
         <!-- Main Content -->
-        <main id="main-content" class="flex-1 p-4 md:p-6 lg:p-8 transition-all duration-300 ml-20 md:ml-64 overflow-x-hidden" style="margin-left: 16rem;">
+        <main id="main-content" class="flex-1 p-4 md:p-6 lg:p-8 transition-all duration-300 ml-20 md:ml-64 overflow-x-hidden dark:text-gray-100" style="margin-left: 16rem;">
             <div class="w-full max-w-full overflow-x-hidden">
                 @yield('content')
             </div>
@@ -108,6 +135,21 @@
     </div>
 
     <script>
+        // Theme toggle
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const moon = document.getElementById('theme-icon-moon');
+            const sun  = document.getElementById('theme-icon-sun');
+            if (!moon || !sun) return;
+            moon.classList.toggle('hidden', isDark);
+            sun.classList.toggle('hidden', !isDark);
+        }
+
         // Sidebar toggle functionality
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -159,6 +201,8 @@
         
         // Restore sidebar state on page load
         document.addEventListener('DOMContentLoaded', function() {
+            updateThemeIcon(document.documentElement.classList.contains('dark'));
+
             const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             if (isCollapsed) {
                 const sidebar = document.getElementById('sidebar');

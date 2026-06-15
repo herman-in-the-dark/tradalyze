@@ -1,16 +1,16 @@
 #!/bin/sh
 # =============================================================================
 # Tradalyze entrypoint — works for:
-#   • direct IP access          http://192.168.1.10:8080
-#   • FQDN access               http://tradalyze.example.com:8080
+#   • direct IP access          http://192.168.1.10  (or :PORT if non-standard)
+#   • FQDN access               http://tradalyze.example.com
 #   • TLS reverse-proxy         https://tradalyze.example.com
-#   • localhost dev             http://localhost:8080
+#   • localhost dev             http://localhost:8080 (host maps 8080→80)
 #
 # Runtime env vars (set via -e or mounted .env):
 #   APP_URL          Full base URL. Auto-detected from host IP when missing.
 #   APP_KEY          Laravel encryption key. Auto-generated when missing.
 #   TRUSTED_PROXIES  Proxy CIDRs or * for all. Defaults to *.
-#   NGINX_PORT       Port nginx listens on (default 8080), used in auto-detect.
+#   NGINX_PORT       Port nginx listens on inside the container (default 80).
 # =============================================================================
 
 ENV_FILE="/var/www/html/.env"
@@ -64,7 +64,7 @@ EFFECTIVE_URL="${APP_URL:-$FILE_URL}"
 
 is_placeholder() {
     case "$1" in
-        ""|"http://localhost"|"http://localhost:8080"|"https://yourdomain.com") return 0;;
+        ""|"http://localhost"|"https://yourdomain.com") return 0;;
         *) return 1;;
     esac
 }
@@ -82,7 +82,7 @@ if is_placeholder "$EFFECTIVE_URL"; then
     # Method 3: hostname -I
     [ -z "$DETECTED_IP" ] && DETECTED_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
     [ -z "$DETECTED_IP" ] && DETECTED_IP="localhost"
-    NGINX_PORT="${NGINX_PORT:-8080}"
+    NGINX_PORT="${NGINX_PORT:-80}"
     if [ "$NGINX_PORT" = "80" ] || [ "$NGINX_PORT" = "443" ]; then
         EFFECTIVE_URL="http://${DETECTED_IP}"
     else

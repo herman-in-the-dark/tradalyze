@@ -10,16 +10,17 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <!-- Header -->
             <div class="text-center">
-                <h1 class="text-4xl font-bold text-gray-900">Tradalyze</h1>
-                <h2 class="mt-6 text-3xl font-bold text-gray-900">Sign in to your account</h2>
-                <p class="mt-2 text-sm text-gray-600">
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Tradalyze</h1>
+                <h2 class="mt-6 text-3xl font-bold text-gray-900 dark:text-white">Sign in to your account</h2>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     Or 
                     <a href="{{ route('register') }}" class="font-medium text-orange-600 hover:text-orange-500">
                         create a new account
@@ -59,29 +60,29 @@
                 <div class="space-y-6">
                     <!-- Email Field -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-                        <input 
-                            id="email" 
-                            name="email" 
-                            type="email" 
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email address</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
                             autocomplete="username"
-                            required 
+                            required
                             value="{{ old('email', $rememberedEmail ?? '') }}"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                             placeholder="you@example.com"
                         >
                     </div>
 
                     <!-- Password Field -->
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input 
-                            id="password" 
-                            name="password" 
-                            type="password" 
-                            autocomplete="current-password" 
-                            required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autocomplete="current-password"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                             placeholder="••••••••"
                         >
                     </div>
@@ -95,7 +96,7 @@
                         type="checkbox" 
                         class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
                     >
-                    <label for="remember" class="ml-2 block text-sm text-gray-900">
+                    <label for="remember" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                         Remember me
                     </label>
                 </div>

@@ -53,11 +53,37 @@ The application includes Docker configuration for easy deployment.
 - Docker Engine 20.x or higher
 - Docker Compose v2.x or higher
 
-**Easiest Way**
+**Easiest Way — Pull from Docker Hub**
 
-Pull Tradalyze's official image from docker hub and follow the instructions provided in there.
+```bash
+# Pull the latest image
+docker pull yeahwethenorth/tradalyze
 
-[Tradalyze Docker Hub Image ](https://hub.docker.com/r/yeahwethenorth/tradalyze)
+# Run with persistent volumes (data survives image updates)
+docker run -d \
+  -p 8080:80 \
+  --name tradalyze \
+  -v tradalyze_database:/var/www/html/database \
+  -v tradalyze_storage:/var/www/html/storage \
+  yeahwethenorth/tradalyze
+```
+
+Access at `http://localhost:8080`
+
+**To update to a newer version:**
+```bash
+docker pull yeahwethenorth/tradalyze
+docker stop tradalyze && docker rm tradalyze
+docker run -d \
+  -p 8080:80 \
+  --name tradalyze \
+  -v tradalyze_database:/var/www/html/database \
+  -v tradalyze_storage:/var/www/html/storage \
+  yeahwethenorth/tradalyze
+```
+Your trade data and uploaded files are stored in named volumes and are **not affected** by the update.
+
+[Tradalyze Docker Hub Image](https://hub.docker.com/r/yeahwethenorth/tradalyze)
 
 **Quick Start if you want to build your own image or want to play around with Tradalyze**
 

@@ -4,7 +4,13 @@
       "Bash(php artisan storage:link)",
       "Bash(php artisan config:clear)",
       "Bash(php artisan route:clear)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(podman images *)",
+      "Bash(podman ps *)",
+      "Bash(podman stop *)",
+      "Bash(podman rm *)",
+      "Bash(podman run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8080/)"
     ]
   }
 }

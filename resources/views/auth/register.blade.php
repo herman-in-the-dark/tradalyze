@@ -10,16 +10,17 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <!-- Header -->
             <div class="text-center">
-                <h1 class="text-4xl font-bold text-gray-900">Tradalyze</h1>
-                <h2 class="mt-6 text-3xl font-bold text-gray-900">Create your account</h2>
-                <p class="mt-2 text-sm text-gray-600">
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Tradalyze</h1>
+                <h2 class="mt-6 text-3xl font-bold text-gray-900 dark:text-white">Create your account</h2>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     Already have an account? 
                     <a href="{{ route('login') }}" class="font-medium text-orange-600 hover:text-orange-500">
                         Sign in
@@ -59,59 +60,59 @@
                 <div class="space-y-6">
                     <!-- Name Field -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                        <input 
-                            id="name" 
-                            name="name" 
-                            type="text" 
-                            autocomplete="name" 
-                            required 
+                        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            autocomplete="name"
+                            required
                             value="{{ old('name') }}"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                             placeholder="John Doe"
                         >
                     </div>
 
                     <!-- Email Field -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-                        <input 
-                            id="email" 
-                            name="email" 
-                            type="email" 
-                            autocomplete="email" 
-                            required 
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email address</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                            required
                             value="{{ old('email') }}"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                             placeholder="you@example.com"
                         >
                     </div>
 
                     <!-- Password Field -->
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input 
-                            id="password" 
-                            name="password" 
-                            type="password" 
-                            autocomplete="new-password" 
-                            required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                             placeholder="••••••••"
                         >
-                        <p class="mt-1 text-xs text-gray-500">Minimum 8 characters</p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Minimum 8 characters</p>
                     </div>
 
                     <!-- Confirm Password Field -->
                     <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                        <input 
-                            id="password_confirmation" 
-                            name="password_confirmation" 
-                            type="password" 
-                            autocomplete="new-password" 
-                            required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm Password</label>
+                        <input
+                            id="password_confirmation"
+                            name="password_confirmation"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                             placeholder="••••••••"
                         >
                     </div>

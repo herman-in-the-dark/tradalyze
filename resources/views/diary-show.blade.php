@@ -13,8 +13,8 @@
                 </svg>
                 Back to Diary
             </a>
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">Diary Entry</h2>
-            <p class="text-gray-600">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Diary Entry</h2>
+            <p class="text-gray-600 dark:text-gray-400">
                 {{ $entry->created_at->format('F j, Y \a\t g:i A') }}
                 @if($entry->created_at != $entry->updated_at)
                     <span class="text-sm text-gray-500">(edited {{ $entry->updated_at->format('M j, Y \a\t g:i A') }})</span>
@@ -60,7 +60,7 @@
     @endif
 
     <!-- View Mode -->
-    <div id="viewMode" class="bg-white rounded-xl shadow-lg p-8">
+    <div id="viewMode" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <div class="entry-content prose prose-lg max-w-none">
             {!! $entry->content !!}
         </div>
@@ -68,16 +68,16 @@
 
     <!-- Trades on this day panel -->
     @if($entry->entry_date && $tradingDayPositions->isNotEmpty())
-    <div class="bg-white rounded-xl shadow-lg mb-6">
-        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-6">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                     Trades on this Day
                 </h3>
-                <p class="text-sm text-gray-500 mt-0.5">{{ $tradingDayPositions->count() }} position{{ $tradingDayPositions->count() !== 1 ? 's' : '' }} closed on {{ $entry->entry_date->format('F d, Y') }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ $tradingDayPositions->count() }} position{{ $tradingDayPositions->count() !== 1 ? 's' : '' }} closed on {{ $entry->entry_date->format('F d, Y') }}</p>
             </div>
             @php
                 $dayTotal = $tradingDayPositions->sum('realized_pnl');
@@ -96,16 +96,16 @@
                 </span>
             </div>
         </div>
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-100 dark:divide-gray-700">
             @foreach($tradingDayPositions as $pos)
             <div class="px-6 py-4">
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex items-center gap-3 min-w-0">
-                        <a href="{{ route('trades.show', $pos) }}" class="font-semibold text-gray-900 hover:text-orange-600 transition-colors text-sm whitespace-nowrap">
+                        <a href="{{ route('trades.show', $pos) }}" class="font-semibold text-gray-900 dark:text-white hover:text-orange-600 transition-colors text-sm whitespace-nowrap">
                             {{ $pos->instrument->symbol }}
                         </a>
                         @if($pos->instrument->isOption())
-                            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                            <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
                                 {{ $pos->instrument->put_call }} ${{ number_format($pos->instrument->strike, 0) }}
                             </span>
                         @endif
@@ -146,18 +146,18 @@
     @endif
 
     <!-- Edit Mode -->
-    <div id="editMode" class="bg-white rounded-xl shadow-lg p-8 hidden">
+    <div id="editMode" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 hidden">
         <form id="updateForm">
             @csrf
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                     Edit Your Trading Notes
                 </label>
-                
+
                 <!-- Toolbar -->
-                <div class="border border-gray-300 rounded-t-lg bg-gray-50 p-2 flex flex-wrap gap-1">
+                <div class="border border-gray-300 dark:border-gray-600 rounded-t-lg bg-gray-50 dark:bg-gray-700 p-2 flex flex-wrap gap-1">
                     <!-- Text Formatting -->
-                    <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-200 rounded transition" title="Bold">
+                    <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition dark:text-gray-300" title="Bold">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M11 5H7v10h4c2.21 0 4-1.79 4-4s-1.79-4-4-4zm-2 8v-2h2c1.1 0 2 .9 2 2s-.9 2-2 2H9zm0-4V7h2c1.1 0 2 .9 2 2s-.9 2-2 2H9z"/>
                         </svg>
@@ -237,19 +237,19 @@
                 </div>
                 
                 <!-- Editable Content Area -->
-                <div 
-                    id="editor" 
-                    contenteditable="true" 
-                    class="border border-gray-300 border-t-0 rounded-b-lg p-6 min-h-[400px] max-h-[600px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+                <div
+                    id="editor"
+                    contenteditable="true"
+                    class="border border-gray-300 dark:border-gray-600 border-t-0 rounded-b-lg p-6 min-h-[400px] max-h-[600px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-900 dark:text-gray-100"
                 >{!! $entry->content !!}</div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
-                <button 
+            <div class="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <button
                     type="button"
                     onclick="toggleEditMode()"
-                    class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
                 >
                     Cancel
                 </button>

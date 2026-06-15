@@ -7,64 +7,64 @@
     <!-- Header with Back Button -->
     <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-4">
-            <a href="{{ route('trades') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+            <a href="{{ route('trades') }}" class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 Back to Trades
             </a>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900">Trade Details</h1>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Trade Details</h1>
     </div>
 
     <!-- Position Summary Card -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-5 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Position Summary</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Position Summary</h2>
         </div>
         <div class="px-6 py-5">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Symbol -->
                 <div>
-                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Symbol</label>
                     <div class="mt-2">
-                        <div class="text-lg font-semibold text-gray-900">{{ $position->instrument->symbol }}</div>
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">{{ $position->instrument->symbol }}</div>
                         @if($position->instrument->underlying_symbol)
-                            <div class="text-sm text-gray-500">{{ $position->instrument->underlying_symbol }}</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $position->instrument->underlying_symbol }}</div>
                         @endif
                     </div>
                 </div>
 
                 <!-- Asset Type -->
                 <div>
-                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">Type</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</label>
                     <div class="mt-2">
                         @if($position->instrument->isOption())
-                            <div class="text-lg font-semibold text-gray-900">
+                            <div class="text-lg font-semibold text-gray-900 dark:text-white">
                                 {{ $position->instrument->put_call }} Option
                             </div>
-                            <div class="text-sm text-gray-500">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
                                 Strike: ${{ number_format($position->instrument->strike, 2) }}
                             </div>
                             @if($position->instrument->expiry)
-                                <div class="text-sm text-gray-500">
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
                                     Expiry: {{ $position->instrument->expiry->format('M d, Y') }}
                                 </div>
                             @endif
-                            <div class="text-sm text-gray-500">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
                                 Multiplier: {{ $position->instrument->multiplier }}
                             </div>
                         @else
-                            <div class="text-lg font-semibold text-gray-900">Stock</div>
+                            <div class="text-lg font-semibold text-gray-900 dark:text-white">Stock</div>
                         @endif
                     </div>
                 </div>
 
                 <!-- Quantity -->
                 <div>
-                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</label>
-                    <div class="mt-2 text-lg font-semibold text-gray-900">
-                        {{ number_format($position->quantity, 2) }} 
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantity</label>
+                    <div class="mt-2 text-lg font-semibold text-gray-900 dark:text-white">
+                        {{ number_format($position->quantity, 2) }}
                         @if($position->instrument->isOption())
                             contracts
                         @else
@@ -75,7 +75,7 @@
 
                 <!-- Status -->
                 <div>
-                    <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</label>
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</label>
                     <div class="mt-2 flex flex-wrap items-center gap-2">
                         @if($position->isClosed())
                             @if($position->isProfitable())
@@ -118,29 +118,29 @@
     <!-- Timeline -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- Open Details -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200 bg-green-50">
-                <h3 class="text-md font-semibold text-green-900">Position Opened</h3>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-green-50 dark:bg-green-900/20">
+                <h3 class="text-md font-semibold text-green-900 dark:text-green-300">Position Opened</h3>
             </div>
             <div class="px-6 py-5">
                 <div class="space-y-3">
                     <div>
-                        <label class="text-xs font-medium text-gray-500 uppercase">Date & Time</label>
-                        <div class="mt-1 text-sm text-gray-900">
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date & Time</label>
+                        <div class="mt-1 text-sm text-gray-900 dark:text-white">
                             {{ $position->open_datetime->format('F d, Y') }}
-                            <span class="text-gray-500">at {{ $position->open_datetime->format('h:i:s A') }}</span>
+                            <span class="text-gray-500 dark:text-gray-400">at {{ $position->open_datetime->format('h:i:s A') }}</span>
                         </div>
                     </div>
                     <div>
-                        <label class="text-xs font-medium text-gray-500 uppercase">Cost Basis</label>
-                        <div class="mt-1 text-lg font-semibold text-gray-900">
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Cost Basis</label>
+                        <div class="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
                             ${{ number_format($position->cost_basis, 2) }}
                         </div>
                     </div>
                     @if($position->instrument->isOption())
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase">Premium per Contract</label>
-                            <div class="mt-1 text-sm text-gray-900">
+                            <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Premium per Contract</label>
+                            <div class="mt-1 text-sm text-gray-900 dark:text-white">
                                 ${{ number_format($position->cost_basis / ($position->quantity * $position->instrument->multiplier), 4) }}
                             </div>
                         </div>
@@ -150,9 +150,9 @@
         </div>
 
         <!-- Close Details -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200 {{ $position->isClosed() ? 'bg-red-50' : 'bg-gray-50' }}">
-                <h3 class="text-md font-semibold {{ $position->isClosed() ? 'text-red-900' : 'text-gray-700' }}">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 {{ $position->isClosed() ? 'bg-red-50 dark:bg-red-900/20' : 'bg-gray-50 dark:bg-gray-700' }}">
+                <h3 class="text-md font-semibold {{ $position->isClosed() ? 'text-red-900 dark:text-red-300' : 'text-gray-700 dark:text-gray-300' }}">
                     Position {{ $position->isClosed() ? 'Closed' : 'Still Open' }}
                 </h3>
             </div>
@@ -160,14 +160,14 @@
                 @if($position->isClosed())
                     <div class="space-y-3">
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase">Date & Time</label>
-                            <div class="mt-1 text-sm text-gray-900">
+                            <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date & Time</label>
+                            <div class="mt-1 text-sm text-gray-900 dark:text-white">
                                 {{ $position->close_datetime->format('F d, Y') }}
-                                <span class="text-gray-500">at {{ $position->close_datetime->format('h:i:s A') }}</span>
+                                <span class="text-gray-500 dark:text-gray-400">at {{ $position->close_datetime->format('h:i:s A') }}</span>
                             </div>
                         </div>
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase">Realized P&L</label>
+                            <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Realized P&L</label>
                             <div class="mt-1 text-2xl font-bold {{ $position->isProfitable() ? 'text-green-600' : 'text-red-600' }}">
                                 @if($position->isProfitable())
                                     +${{ number_format($position->realized_pnl, 2) }}
@@ -177,18 +177,18 @@
                             </div>
                         </div>
                         <div>
-                            <label class="text-xs font-medium text-gray-500 uppercase">Duration</label>
-                            <div class="mt-1 text-sm text-gray-900">
+                            <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Duration</label>
+                            <div class="mt-1 text-sm text-gray-900 dark:text-white">
                                 {{ $position->open_datetime->diff($position->close_datetime)->format('%d days, %h hours') }}
                             </div>
                         </div>
                     </div>
                 @else
                     <div class="text-center py-8">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <p class="mt-2 text-sm text-gray-500">Position is still open</p>
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Position is still open</p>
                     </div>
                 @endif
             </div>
@@ -202,12 +202,12 @@
         $multiplier = $position->instrument->multiplier;
         $costBasis  = (float) $position->cost_basis;
     @endphp
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-5 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ $position->isOpen() ? 'Close Position' : 'Edit Close Details' }}
             </h2>
-            <p class="text-sm text-gray-500 mt-1">
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 {{ $position->isOpen()
                     ? 'Manually close this position with a specific outcome.'
                     : 'Adjust close date and realized P&L, or reopen this position.' }}
@@ -244,7 +244,7 @@
                 <div class="grid grid-cols-3 gap-4 mb-5">
                     {{-- Close Date/Time --}}
                     <div>
-                        <label for="close_datetime" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="close_datetime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Close Date &amp; Time <span class="text-red-500">*</span>
                         </label>
                         <input type="datetime-local"
@@ -252,7 +252,7 @@
                                id="close_datetime"
                                value="{{ $position->close_datetime ? $position->close_datetime->format('Y-m-d\TH:i') : '' }}"
                                min="{{ $position->open_datetime->format('Y-m-d\TH:i') }}"
-                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                               class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                         @error('close_datetime')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -260,16 +260,16 @@
 
                     {{-- Close Price (optional, auto-fills P&L) --}}
                     <div>
-                        <label for="close_price_hint" class="block text-sm font-medium text-gray-700 mb-1">
-                            Close Price ($) <span class="text-gray-400 font-normal text-xs">— optional, auto-fills P&amp;L</span>
+                        <label for="close_price_hint" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Close Price ($) <span class="text-gray-400 dark:text-gray-500 font-normal text-xs">— optional, auto-fills P&amp;L</span>
                         </label>
                         <input type="number"
                                id="close_price_hint"
                                step="0.0001"
                                min="0"
                                placeholder="0.00"
-                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                        <p class="mt-1 text-xs text-gray-400">Excludes close fees</p>
+                               class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Excludes close fees</p>
                     </div>
 
                     {{-- Realized P&L (required) --}}
@@ -283,7 +283,7 @@
                                step="0.01"
                                value="{{ old('realized_pnl', $position->realized_pnl) }}"
                                placeholder="e.g. 150.00 or -75.50"
-                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                               class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                         @error('realized_pnl')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -299,9 +299,9 @@
             </form>
 
             @if($position->isClosed())
-                <hr class="my-5 border-gray-200">
+                <hr class="my-5 border-gray-200 dark:border-gray-700">
                 <div class="flex items-center justify-between">
-                    <p class="text-sm text-gray-500">Need to revert this close? Reopen the position to re-enter data.</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Need to revert this close? Reopen the position to re-enter data.</p>
                     <form action="{{ route('trades.update', $position) }}" method="POST">
                         @csrf
                         @method('PATCH')
@@ -319,25 +319,25 @@
     </div>
 
     <!-- Fills History -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="px-6 py-5 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Execution History</h2>
-            <p class="text-sm text-gray-500 mt-1">All fills related to this instrument</p>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Execution History</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">All fills related to this instrument</p>
         </div>
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Side</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fees</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exec ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date & Time</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Side</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quantity</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fees</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Exec ID</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @php
                         $totalFees = 0;
                     @endphp
@@ -349,10 +349,10 @@
                             }
                             $totalFees += $fill->fees;
                         @endphp
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 {{ $fill->datetime->format('M d, Y') }}
-                                <span class="block text-xs text-gray-500">{{ $fill->datetime->format('H:i:s') }}</span>
+                                <span class="block text-xs text-gray-500 dark:text-gray-400">{{ $fill->datetime->format('H:i:s') }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($fill->side === 'BUY')
@@ -365,30 +365,30 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 {{ number_format($fill->quantity, 2) }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 ${{ number_format($fill->price, 2) }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 ${{ number_format($fill->fees, 2) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {{ $fill->side === 'BUY' ? 'text-red-600' : 'text-green-600' }}">
                                 {{ $fill->side === 'BUY' ? '-' : '+' }}${{ number_format(abs($total), 2) }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
+                            <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400 font-mono">
                                 {{ $fill->exec_id }}
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot class="bg-gray-50">
+                <tfoot class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <td colspan="4" class="px-6 py-3 text-right text-sm font-medium text-gray-700">
+                        <td colspan="4" class="px-6 py-3 text-right text-sm font-medium text-gray-700 dark:text-gray-300">
                             Total Fees:
                         </td>
-                        <td colspan="3" class="px-6 py-3 text-sm font-semibold text-gray-900">
+                        <td colspan="3" class="px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">
                             ${{ number_format($totalFees, 2) }}
                         </td>
                     </tr>
@@ -398,15 +398,15 @@
     </div>
 
     <!-- Tags Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6">
-        <div class="px-6 py-5 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Trade Tags</h2>
-            <p class="text-sm text-gray-500 mt-1">Categorize this trade by setup type</p>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
+        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Trade Tags</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Categorize this trade by setup type</p>
         </div>
         <div class="px-6 py-5">
             <!-- Current Tags -->
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Current Tags</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Tags</label>
                 <div id="current-tags" class="flex flex-wrap gap-2">
                     @forelse($position->tags as $tag)
                         <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium text-white" style="background-color: {{ $tag->color }}">
@@ -422,14 +422,14 @@
                             </button>
                         </span>
                     @empty
-                        <p class="text-sm text-gray-500">No tags assigned</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">No tags assigned</p>
                     @endforelse
                 </div>
             </div>
 
             <!-- Available Tags -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Add Tags</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Add Tags</label>
                 <div class="flex flex-wrap gap-2">
                     @foreach($availableTags as $tag)
                         @if(!$position->tags->contains($tag->id))
@@ -453,15 +453,15 @@
     </div>
 
     <!-- Screenshots Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6">
-        <div class="px-6 py-5 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Trade Screenshots</h2>
-            <p class="text-sm text-gray-500 mt-1">Attach chart screenshots or other images to this trade</p>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
+        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Trade Screenshots</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Attach chart screenshots or other images to this trade</p>
         </div>
         <div class="px-6 py-5">
             <!-- Upload form -->
             <div class="mb-5">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Screenshot</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload Screenshot</label>
                 <div class="flex items-center gap-3">
                     <input type="file" id="screenshotInput" accept="image/*" class="block text-sm text-gray-500
                         file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
@@ -481,7 +481,7 @@
                     <a href="{{ $shot->url }}" target="_blank">
                         <img src="{{ $shot->url }}"
                              alt="{{ $shot->original_name ?? 'Screenshot' }}"
-                             class="w-full h-36 object-cover rounded-lg border border-gray-200 hover:border-orange-400 transition-colors">
+                             class="w-full h-36 object-cover rounded-lg border border-gray-200 dark:border-gray-600 hover:border-orange-400 transition-colors">
                     </a>
                     <button type="button"
                             onclick="deleteScreenshot({{ $shot->id }})"
@@ -492,21 +492,21 @@
                         </svg>
                     </button>
                     @if($shot->original_name)
-                    <p class="mt-1 text-xs text-gray-500 truncate">{{ $shot->original_name }}</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 truncate">{{ $shot->original_name }}</p>
                     @endif
                 </div>
                 @empty
-                <p id="noScreenshots" class="col-span-full text-sm text-gray-400">No screenshots uploaded yet.</p>
+                <p id="noScreenshots" class="col-span-full text-sm text-gray-400 dark:text-gray-500">No screenshots uploaded yet.</p>
                 @endforelse
             </div>
         </div>
     </div>
 
     <!-- Notes Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6">
-        <div class="px-6 py-5 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Trade Notes</h2>
-            <p class="text-sm text-gray-500 mt-1">Add notes about this trade for future reference (supports rich text, images, and formatting)</p>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
+        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Trade Notes</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Add notes about this trade for future reference (supports rich text, images, and formatting)</p>
         </div>
         <div class="px-6 py-5">
             @if(session('success'))
@@ -530,81 +530,81 @@
                 
                 <div class="mb-4">
                     <!-- Toolbar -->
-                    <div class="border border-gray-300 rounded-t-lg bg-gray-50 p-2 flex flex-wrap gap-1">
+                    <div class="border border-gray-300 dark:border-gray-600 rounded-t-lg bg-gray-50 dark:bg-gray-700 p-2 flex flex-wrap gap-1">
                         <!-- Text Formatting -->
-                        <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-200 rounded transition" title="Bold">
+                        <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Bold">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M11 5H7v10h4c2.21 0 4-1.79 4-4s-1.79-4-4-4zm-2 8v-2h2c1.1 0 2 .9 2 2s-.9 2-2 2H9zm0-4V7h2c1.1 0 2 .9 2 2s-.9 2-2 2H9z"/>
                             </svg>
                         </button>
                         
-                        <button type="button" onclick="formatText('italic')" class="p-2 hover:bg-gray-200 rounded transition" title="Italic">
+                        <button type="button" onclick="formatText('italic')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Italic">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 4H8l-2 12h2l2-12zm2 0h2l-2 12h-2l2-12z"/>
                             </svg>
                         </button>
                         
-                        <button type="button" onclick="formatText('underline')" class="p-2 hover:bg-gray-200 rounded transition" title="Underline">
+                        <button type="button" onclick="formatText('underline')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Underline">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 16c-2.76 0-5-2.24-5-5V4h2v7c0 1.66 1.34 3 3 3s3-1.34 3-3V4h2v7c0 2.76-2.24 5-5 5zm-6 2h12v2H4v-2z"/>
                             </svg>
                         </button>
                         
-                        <div class="w-px bg-gray-300 mx-1"></div>
+                        <div class="w-px bg-gray-300 dark:bg-gray-500 mx-1"></div>
                         
                         <!-- Headings -->
-                        <button type="button" onclick="formatText('formatBlock', 'h1')" class="px-3 py-2 hover:bg-gray-200 rounded transition font-bold" title="Heading 1">
+                        <button type="button" onclick="formatText('formatBlock', 'h1')" class="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition font-bold" title="Heading 1">
                             H1
                         </button>
                         
-                        <button type="button" onclick="formatText('formatBlock', 'h2')" class="px-3 py-2 hover:bg-gray-200 rounded transition font-semibold" title="Heading 2">
+                        <button type="button" onclick="formatText('formatBlock', 'h2')" class="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition font-semibold" title="Heading 2">
                             H2
                         </button>
                         
-                        <button type="button" onclick="formatText('formatBlock', 'h3')" class="px-3 py-2 hover:bg-gray-200 rounded transition font-medium" title="Heading 3">
+                        <button type="button" onclick="formatText('formatBlock', 'h3')" class="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition font-medium" title="Heading 3">
                             H3
                         </button>
                         
-                        <div class="w-px bg-gray-300 mx-1"></div>
+                        <div class="w-px bg-gray-300 dark:bg-gray-500 mx-1"></div>
                         
                         <!-- Lists -->
-                        <button type="button" onclick="formatText('insertUnorderedList')" class="p-2 hover:bg-gray-200 rounded transition" title="Bullet List">
+                        <button type="button" onclick="formatText('insertUnorderedList')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Bullet List">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 7h2V5H3v2zm0 4h2V9H3v2zm0 4h2v-2H3v2zm4-8v2h10V7H7zm0 4h10V9H7v2zm0 4h10v-2H7v2z"/>
                             </svg>
                         </button>
                         
-                        <button type="button" onclick="formatText('insertOrderedList')" class="p-2 hover:bg-gray-200 rounded transition" title="Numbered List">
+                        <button type="button" onclick="formatText('insertOrderedList')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Numbered List">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5 15H3v-2h2v2zm0-4H3V9h2v2zm0-4H3V5h2v2zm4 8h10v-2H9v2zm0-4h10V9H9v2zm0-4h10V5H9v2z"/>
                             </svg>
                         </button>
                         
-                        <div class="w-px bg-gray-300 mx-1"></div>
+                        <div class="w-px bg-gray-300 dark:bg-gray-500 mx-1"></div>
                         
                         <!-- Alignment -->
-                        <button type="button" onclick="formatText('justifyLeft')" class="p-2 hover:bg-gray-200 rounded transition" title="Align Left">
+                        <button type="button" onclick="formatText('justifyLeft')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Align Left">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 5h14v2H3V5zm0 4h10v2H3V9zm0 4h14v2H3v-2zm0 4h10v2H3v-2z"/>
                             </svg>
                         </button>
                         
-                        <button type="button" onclick="formatText('justifyCenter')" class="p-2 hover:bg-gray-200 rounded transition" title="Align Center">
+                        <button type="button" onclick="formatText('justifyCenter')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Align Center">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 5h14v2H3V5zm2 4h10v2H5V9zm-2 4h14v2H3v-2zm2 4h10v2H5v-2z"/>
                             </svg>
                         </button>
                         
-                        <button type="button" onclick="formatText('justifyRight')" class="p-2 hover:bg-gray-200 rounded transition" title="Align Right">
+                        <button type="button" onclick="formatText('justifyRight')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Align Right">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 5h14v2H3V5zm4 4h10v2H7V9zm-4 4h14v2H3v-2zm4 4h10v2H7v-2z"/>
                             </svg>
                         </button>
                         
-                        <div class="w-px bg-gray-300 mx-1"></div>
+                        <div class="w-px bg-gray-300 dark:bg-gray-500 mx-1"></div>
                         
                         <!-- Clear Formatting -->
-                        <button type="button" onclick="formatText('removeFormat')" class="p-2 hover:bg-gray-200 rounded transition" title="Clear Formatting">
+                        <button type="button" onclick="formatText('removeFormat')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-300 rounded transition" title="Clear Formatting">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M18.59 7L12 13.59 5.41 7 4 8.41l8 8 8-8L18.59 7z"/>
                             </svg>
@@ -613,9 +613,9 @@
                     
                     <!-- Editable Content Area -->
                     <div 
-                        id="notesEditor" 
-                        contenteditable="true" 
-                        class="border border-gray-300 border-t-0 rounded-b-lg p-6 min-h-[300px] max-h-[500px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+                        id="notesEditor"
+                        contenteditable="true"
+                        class="border border-gray-300 dark:border-gray-600 border-t-0 rounded-b-lg p-6 min-h-[300px] max-h-[500px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-900 dark:text-gray-100"
                         placeholder="Add notes about this trade... (strategy, emotions, lessons learned, etc.)"
                     >{!! old('notes', $position->notes) !!}</div>
                     

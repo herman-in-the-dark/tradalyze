@@ -5,7 +5,7 @@
 @section('content')
 <!-- Success/Error Messages -->
 @if(session('success'))
-    <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
+    <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg flex items-center">
         <svg class="w-5 h-5 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
@@ -14,7 +14,7 @@
 @endif
 
 @if(session('error'))
-    <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
+    <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded-lg flex items-center">
         <svg class="w-5 h-5 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
@@ -24,36 +24,36 @@
 
 <!-- Loading Overlay -->
 <div id="loading-overlay" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md mx-4 text-center">
         <div class="flex justify-center mb-4">
             <svg class="animate-spin h-12 w-12 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Processing Upload...</h3>
-        <p class="text-gray-600 text-sm">Please wait while we import your trades. This may take a moment.</p>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Processing Upload...</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">Please wait while we import your trades. This may take a moment.</p>
     </div>
 </div>
 
 <!-- Success Modal -->
 <div id="success-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
         <div class="p-6">
             <div class="flex items-center justify-center mb-4">
-                <div class="flex-shrink-0 bg-green-100 rounded-full p-3">
+                <div class="flex-shrink-0 bg-green-100 dark:bg-green-900/30 rounded-full p-3">
                     <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 text-center mb-2">Import Successful!</h3>
-            <p class="text-gray-600 text-center mb-6" id="success-modal-message">Your trades have been imported successfully.</p>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white text-center mb-2">Import Successful!</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center mb-6" id="success-modal-message">Your trades have been imported successfully.</p>
             <div class="flex flex-col space-y-3">
                 <button onclick="viewTrades()" class="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors">
                     View My Trades
                 </button>
-                <button onclick="closeSuccessModal()" class="w-full px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-colors">
+                <button onclick="closeSuccessModal()" class="w-full px-4 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-300 font-medium rounded-lg transition-colors">
                     Stay Here
                 </button>
             </div>
@@ -63,29 +63,29 @@
 
 <div class="mb-8">
     <div class="flex items-center mb-4">
-        <a href="{{ route('trades') }}" class="mr-4 text-gray-600 hover:text-gray-900 transition-colors">
+        <a href="{{ route('trades') }}" class="mr-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
         </a>
         <div>
-            <h2 class="text-3xl font-bold text-gray-900">Add Trade</h2>
-            <p class="text-gray-600 mt-1">Add a new trade manually or import from CSV</p>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Add Trade</h2>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Add a new trade manually or import from CSV</p>
         </div>
     </div>
 </div>
 
 <!-- Tabs -->
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <div class="border-b border-gray-200">
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+    <div class="border-b border-gray-200 dark:border-gray-700">
         <nav class="flex -mb-px">
             <button onclick="switchTab('manual')" id="tab-manual" class="tab-button py-4 px-8 text-center border-b-2 font-medium text-sm focus:outline-none transition-colors border-orange-600 text-orange-600">
                 Manual Entry
             </button>
-            <button onclick="switchTab('csv')" id="tab-csv" class="tab-button py-4 px-8 text-center border-b-2 font-medium text-sm focus:outline-none transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+            <button onclick="switchTab('csv')" id="tab-csv" class="tab-button py-4 px-8 text-center border-b-2 font-medium text-sm focus:outline-none transition-colors border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300">
                 Import CSV
             </button>
-            <button onclick="switchTab('auto-import')" id="tab-auto-import" class="tab-button py-4 px-8 text-center border-b-2 font-medium text-sm focus:outline-none transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+            <button onclick="switchTab('auto-import')" id="tab-auto-import" class="tab-button py-4 px-8 text-center border-b-2 font-medium text-sm focus:outline-none transition-colors border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300">
                 Auto Import Trades
             </button>
         </nav>
@@ -100,15 +100,15 @@
                 
                 <!-- Asset Type Selection -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Asset Type</label>
-                    <div class="inline-flex rounded-lg border border-gray-300 p-1 bg-gray-50">
-                        <button type="button" onclick="selectAssetType('stock')" class="asset-type-btn px-6 py-2 rounded-md text-sm font-medium transition-all hover:bg-gray-100">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Asset Type</label>
+                    <div class="inline-flex rounded-lg border border-gray-300 dark:border-gray-600 p-1 bg-gray-50 dark:bg-gray-700">
+                        <button type="button" onclick="selectAssetType('stock')" class="asset-type-btn px-6 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 transition-all hover:bg-gray-100 dark:hover:bg-gray-600">
                             Stock
                         </button>
                         <button type="button" onclick="selectAssetType('option')" class="asset-type-btn px-6 py-2 rounded-md text-sm font-medium bg-orange-600 text-white transition-all">
                             Option
                         </button>
-                        <button type="button" onclick="selectAssetType('future')" class="asset-type-btn px-6 py-2 rounded-md text-sm font-medium transition-all hover:bg-gray-100">
+                        <button type="button" onclick="selectAssetType('future')" class="asset-type-btn px-6 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 transition-all hover:bg-gray-100 dark:hover:bg-gray-600">
                             Future
                         </button>
                     </div>
@@ -119,13 +119,13 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                     <!-- Symbol -->
                     <div>
-                        <label for="symbol" class="block text-xs font-medium text-gray-700 mb-1">Symbol *</label>
+                        <label for="symbol" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Symbol *</label>
                         <input 
                             type="text" 
                             id="symbol" 
                             name="symbol" 
                             required
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500 uppercase"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500 uppercase"
                             placeholder="SPX"
                             oninput="this.value = this.value.toUpperCase()"
                         >
@@ -133,7 +133,7 @@
 
                     <!-- Quantity -->
                     <div>
-                        <label for="quantity" class="block text-xs font-medium text-gray-700 mb-1">
+                        <label for="quantity" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                             <span id="quantity-label">Contracts *</span>
                         </label>
                         <input 
@@ -144,7 +144,7 @@
                             value="1"
                             step="1"
                             min="1"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             placeholder="1"
                             oninput="calculatePnL()"
                         >
@@ -152,25 +152,25 @@
 
                     <!-- Opened Date -->
                     <div>
-                        <label for="opened_date" class="block text-xs font-medium text-gray-700 mb-1">Opened Date *</label>
+                        <label for="opened_date" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Opened Date *</label>
                         <input 
                             type="datetime-local" 
                             id="opened_date" 
                             name="opened_date" 
                             required
                             value="{{ date('Y-m-d\TH:i') }}"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                         >
                     </div>
 
                     <!-- Closed Date -->
                     <div>
-                        <label for="closed_date" class="block text-xs font-medium text-gray-700 mb-1">Closed Date</label>
+                        <label for="closed_date" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Closed Date</label>
                         <input 
                             type="datetime-local" 
                             id="closed_date" 
                             name="closed_date"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             oninput="calculatePnL()"
                         >
                     </div>
@@ -181,13 +181,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <!-- Option Type -->
                         <div>
-                            <label for="option_type" class="block text-xs font-medium text-gray-700 mb-1">
+                            <label for="option_type" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 <span id="option-type-label">Option Type *</span>
                             </label>
                             <select 
                                 id="option_type" 
                                 name="option_type"
-                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             >
                                 <option value="CALL">CALL</option>
                                 <option value="PUT">PUT</option>
@@ -196,39 +196,39 @@
 
                         <!-- Strike Price -->
                         <div>
-                            <label for="strike_price" class="block text-xs font-medium text-gray-700 mb-1">Strike Price *</label>
+                            <label for="strike_price" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Strike Price *</label>
                             <input 
                                 type="number" 
                                 id="strike_price" 
                                 name="strike_price"
                                 step="0.01"
                                 min="0"
-                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                                 placeholder="100.00"
                             >
                         </div>
 
                         <!-- Expiration Date -->
                         <div>
-                            <label for="expiration_date" class="block text-xs font-medium text-gray-700 mb-1">Expiration Date</label>
+                            <label for="expiration_date" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Expiration Date</label>
                             <input 
                                 type="date" 
                                 id="expiration_date" 
                                 name="expiration_date"
-                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             >
                         </div>
 
                         <!-- Multiplier -->
                         <div>
-                            <label for="multiplier" class="block text-xs font-medium text-gray-700 mb-1">Multiplier</label>
+                            <label for="multiplier" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Multiplier</label>
                             <input 
                                 type="number" 
                                 id="multiplier" 
                                 name="multiplier"
                                 value="100"
                                 min="1"
-                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                                 oninput="calculatePnL()"
                             >
                         </div>
@@ -239,7 +239,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                     <!-- Entry Price -->
                     <div>
-                        <label for="entry_price" class="block text-xs font-medium text-gray-700 mb-1">
+                        <label for="entry_price" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                             <span id="entry-price-label">Entry Price *</span>
                         </label>
                         <input 
@@ -249,7 +249,7 @@
                             required
                             step="0.01"
                             min="0"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             placeholder="10.50"
                             oninput="calculatePnL()"
                         >
@@ -257,7 +257,7 @@
 
                     <!-- Exit Price -->
                     <div>
-                        <label for="exit_price" class="block text-xs font-medium text-gray-700 mb-1">
+                        <label for="exit_price" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                             <span id="exit-price-label">Exit Price</span>
                         </label>
                         <input 
@@ -266,7 +266,7 @@
                             name="exit_price"
                             step="0.01"
                             min="0"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             placeholder="12.00"
                             oninput="calculatePnL()"
                         >
@@ -274,7 +274,7 @@
 
                     <!-- Fees -->
                     <div>
-                        <label for="fees" class="block text-xs font-medium text-gray-700 mb-1">Total Fees</label>
+                        <label for="fees" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Total Fees</label>
                         <input 
                             type="number" 
                             id="fees" 
@@ -282,7 +282,7 @@
                             value="0"
                             step="0.01"
                             min="0"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             placeholder="0.00"
                             oninput="calculatePnL()"
                         >
@@ -291,23 +291,23 @@
 
                 <!-- Notes -->
                 <div class="mb-6">
-                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                    <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
                     <textarea 
                         id="notes" 
                         name="notes"
                         rows="4"
-                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-vertical"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-vertical"
                         placeholder="Add any additional notes about this trade..."
                     ></textarea>
-                    <p class="text-xs text-gray-500 mt-1">Optional: Add context, strategy, or other information about this trade</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Optional: Add context, strategy, or other information about this trade</p>
                 </div>
 
                 <!-- Tag Selection -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Trade Tags</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Trade Tags</label>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         @foreach($userTags as $tag)
-                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                            <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <input 
                                     type="checkbox" 
                                     name="tag_ids[]" 
@@ -320,42 +320,42 @@
                                         class="inline-block w-3 h-3 rounded-full mr-2" 
                                         style="background-color: {{ $tag->color }};"
                                     ></span>
-                                    <span class="text-sm text-gray-700">{{ $tag->name }}</span>
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ $tag->name }}</span>
                                 </span>
                             </label>
                         @endforeach
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">Select one or more tags to categorize this trade. "Untagged" is selected by default.</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Select one or more tags to categorize this trade. "Untagged" is selected by default.</p>
                 </div>
 
                 <!-- P&L Display -->
-                <div id="pnl-display" class="hidden border-2 rounded-lg p-6 mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Trade Calculation</h3>
+                <div id="pnl-display" class="hidden border-2 dark:border-gray-600 rounded-lg p-6 mb-6 dark:bg-gray-700/30">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Trade Calculation</h3>
                     
                     <!-- Calculation Breakdown -->
                     <div class="space-y-3 mb-4">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-sm text-gray-600">Entry Price:</span>
-                            <span id="calc-entry" class="text-sm font-medium text-gray-900"></span>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Entry Price:</span>
+                            <span id="calc-entry" class="text-sm font-medium text-gray-900 dark:text-white"></span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-sm text-gray-600">Exit Price:</span>
-                            <span id="calc-exit" class="text-sm font-medium text-gray-900"></span>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Exit Price:</span>
+                            <span id="calc-exit" class="text-sm font-medium text-gray-900 dark:text-white"></span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-sm text-gray-600">Price Difference:</span>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Price Difference:</span>
                             <span id="calc-diff" class="text-sm font-medium"></span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-sm text-gray-600">Quantity × Multiplier:</span>
-                            <span id="calc-multiplier" class="text-sm font-medium text-gray-900"></span>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Quantity × Multiplier:</span>
+                            <span id="calc-multiplier" class="text-sm font-medium text-gray-900 dark:text-white"></span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-sm text-gray-600">Gross P&L:</span>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Gross P&L:</span>
                             <span id="calc-gross" class="text-sm font-semibold"></span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-sm text-gray-600">Total Fees:</span>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Total Fees:</span>
                             <span id="calc-fees" class="text-sm font-medium text-red-600"></span>
                         </div>
                     </div>
@@ -364,21 +364,21 @@
                     <div class="bg-gradient-to-r rounded-lg p-4 border-2" id="pnl-container">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600 mb-1">Net Profit/Loss</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Net Profit/Loss</p>
                                 <p id="pnl-value" class="text-3xl font-bold"></p>
                             </div>
                             <div id="pnl-icon"></div>
                         </div>
                     </div>
                     
-                    <p id="pnl-formula" class="text-xs text-gray-500 mt-3 text-center"></p>
+                    <p id="pnl-formula" class="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center"></p>
                 </div>
 
                 <!-- Submit Buttons -->
                 <div class="flex justify-end space-x-4">
                     <a 
                         href="{{ route('trades') }}"
-                        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        class="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
                         Cancel
                     </a>
@@ -400,29 +400,29 @@
                 
                 <!-- Broker Selection -->
                 <div class="mb-6">
-                    <label for="broker" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="broker" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Select Broker
                     </label>
-                    <select id="broker" name="broker" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
+                    <select id="broker" name="broker" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
                         <option value="interactive_broker" selected>Interactive Broker</option>
                     </select>
-                    <p class="mt-2 text-xs text-gray-500">
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                         Choose your broker to ensure proper CSV format handling
                     </p>
                 </div>
 
                 <!-- File Upload Area -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Upload CSV File
                     </label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-orange-400 transition-colors">
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg hover:border-orange-400 transition-colors">
                         <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500">
+                            <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                <label for="file-upload" class="relative cursor-pointer bg-white dark:bg-transparent rounded-md font-medium text-orange-600 hover:text-orange-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500">
                                     <span>Upload a file</span>
                                     <input id="file-upload" name="csv_file" type="file" accept=".csv" class="sr-only" onchange="handleFileSelect(event)">
                                 </label>
@@ -435,15 +435,15 @@
                     </div>
                     
                     <!-- Selected File Display -->
-                    <div id="file-info" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div id="file-info" class="hidden mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <svg class="w-8 h-8 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900" id="file-name"></p>
-                                    <p class="text-xs text-gray-500" id="file-size"></p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white" id="file-name"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" id="file-size"></p>
                                 </div>
                             </div>
                             <button type="button" onclick="clearFile()" class="text-red-600 hover:text-red-800">
@@ -456,15 +456,15 @@
                 </div>
 
                 <!-- CSV Format Instructions -->
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                    <h4 class="text-sm font-semibold text-blue-900 mb-2 flex items-center">
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                    <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-2 flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         CSV Format Guidelines
                     </h4>
-                    <p class="text-xs text-blue-800 mb-2">Your CSV file should contain the following structure:</p>
-                    <ul class="text-xs text-blue-700 list-disc list-inside space-y-1">
+                    <p class="text-xs text-blue-800 dark:text-blue-300 mb-2">Your CSV file should contain the following structure:</p>
+                    <ul class="text-xs text-blue-700 dark:text-blue-400 list-disc list-inside space-y-1">
                         <li>File format details will be defined soon</li>
                         <li>Make sure your CSV is properly formatted</li>
                         <li>First row should contain column headers</li>
@@ -473,7 +473,7 @@
 
                 <!-- Action Buttons -->
                 <div class="flex justify-end space-x-4">
-                    <a href="{{ route('trades') }}" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                    <a href="{{ route('trades') }}" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                         Cancel
                     </a>
                     <button type="submit" id="upload-btn" disabled class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center">
@@ -494,13 +494,13 @@
                 
                 <!-- Broker Selection -->
                 <div class="mb-6">
-                    <label for="broker-select" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="broker-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Select Broker
                     </label>
-                    <select id="broker-select" name="broker" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors" onchange="handleBrokerChange()">
+                    <select id="broker-select" name="broker" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors" onchange="handleBrokerChange()">
                         <option value="interactive_broker" selected>Interactive Broker</option>
                     </select>
-                    <p class="mt-2 text-xs text-gray-500">
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                         Select your broker to configure automatic trade imports
                     </p>
                 </div>
@@ -509,7 +509,7 @@
                 <div id="broker-fields" class="space-y-6">
                     <!-- Flex Token -->
                     <div>
-                        <label for="flex-token" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="flex-token" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Flex Token *
                         </label>
                         <div class="relative">
@@ -518,14 +518,14 @@
                                 id="flex-token" 
                                 name="flex_token"
                                 value="{{ old('flex_token', $user->ib_flex_token) }}"
-                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                                class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                                 placeholder="Enter your Flex Token"
                                 oninput="validateBrokerFields()"
                                 autocomplete="off"
                             >
                             <button type="button"
                                 onclick="toggleFlexTokenVisibility(this)"
-                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
                                 title="Show / hide token"
                                 tabindex="-1">
                                 {{-- Eye icon (shown when hidden) --}}
@@ -539,14 +539,14 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="mt-2 text-xs text-gray-500">
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                             Your Interactive Broker Flex Token for API access
                         </p>
                     </div>
 
                     <!-- Query ID -->
                     <div>
-                        <label for="query-id" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="query-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Query ID *
                         </label>
                         <input 
@@ -554,24 +554,24 @@
                             id="query-id" 
                             name="query_id"
                             value="{{ old('query_id', $user->ib_query_id) }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                             placeholder="Enter your Query ID"
                             oninput="validateBrokerFields()"
                         >
-                        <p class="mt-2 text-xs text-gray-500">
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                             Your Interactive Broker Query ID for trade data retrieval
                         </p>
                     </div>
 
                     <!-- Info Box -->
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                         <div class="flex">
-                            <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                             </svg>
                             <div>
-                                <h4 class="text-sm font-semibold text-blue-800 mb-1">How to get your credentials:</h4>
-                                <ul class="text-xs text-blue-700 list-disc list-inside space-y-1">
+                                <h4 class="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-1">How to get your credentials:</h4>
+                                <ul class="text-xs text-blue-700 dark:text-blue-400 list-disc list-inside space-y-1">
                                     <li>Log in to your Interactive Broker account</li>
                                     <li>Navigate to Account Management → Reports → Flex Queries</li>
                                     <li>Create or use an existing Flex Query and copy the Query ID</li>
@@ -583,11 +583,11 @@
 
                     <!-- Action Buttons -->
                     <div class="flex justify-between items-center pt-4">
-                        <a href="{{ route('trades') }}" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                        <a href="{{ route('trades') }}" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                             Cancel
                         </a>
                         <div class="flex space-x-3">
-                            <button type="button" id="save-credentials-btn" onclick="saveBrokerCredentials()" disabled class="px-6 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-50 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors flex items-center">
+                            <button type="button" id="save-credentials-btn" onclick="saveBrokerCredentials()" disabled class="px-6 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-600 disabled:bg-gray-100 dark:disabled:bg-gray-700/50 disabled:text-gray-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-colors flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                                 </svg>
@@ -1151,6 +1151,12 @@
         if (hasSavedCredentials) {
             document.getElementById('save-credentials-btn').disabled = false;
             document.getElementById('import-trades-btn').disabled = false;
+        }
+
+        // Auto-select tab from URL query param (e.g. ?tab=auto-import)
+        const urlTab = new URLSearchParams(window.location.search).get('tab');
+        if (urlTab && ['manual', 'csv', 'auto-import'].includes(urlTab)) {
+            switchTab(urlTab);
         }
     });
 </script>

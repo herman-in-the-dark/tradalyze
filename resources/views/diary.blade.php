@@ -5,11 +5,11 @@
 @section('content')
 <div class="max-w-5xl mx-auto">
     <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">Trading Diary</h2>
-        <p class="text-gray-600">Document your trading insights, strategies, and reflections</p>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Trading Diary</h2>
+        <p class="text-gray-600 dark:text-gray-400">Document your trading insights, strategies, and reflections</p>
     </div>
 
-    <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <!-- Rich Text Editor Container -->
         <form id="diaryForm">
             @csrf
@@ -17,7 +17,7 @@
             {{-- Trading date for this entry --}}
             <div class="mb-5 flex flex-col sm:flex-row sm:items-end gap-4">
                 <div class="flex-1">
-                    <label for="entry_date" class="block text-sm font-semibold text-gray-700 mb-1">
+                    <label for="entry_date" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                         Trading Date
                         <span class="font-normal text-gray-400 ml-1">(leave blank for a general note)</span>
                     </label>
@@ -26,7 +26,7 @@
                         id="entry_date"
                         name="entry_date"
                         value="{{ request('date', date('Y-m-d')) }}"
-                        class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-orange-500 focus:border-orange-500 w-full sm:w-56"
+                        class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-orange-500 focus:border-orange-500 w-full sm:w-56 dark:bg-gray-700 dark:text-white"
                     >
                 </div>
             </div>
@@ -48,9 +48,9 @@
                 </label>
                 
                 <!-- Toolbar -->
-                <div class="border border-gray-300 rounded-t-lg bg-gray-50 p-2 flex flex-wrap gap-1">
+                <div class="border border-gray-300 dark:border-gray-600 rounded-t-lg bg-gray-50 dark:bg-gray-700 p-2 flex flex-wrap gap-1">
                     <!-- Text Formatting -->
-                    <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-200 rounded transition" title="Bold">
+                    <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition dark:text-gray-300" title="Bold">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M11 5H7v10h4c2.21 0 4-1.79 4-4s-1.79-4-4-4zm-2 8v-2h2c1.1 0 2 .9 2 2s-.9 2-2 2H9zm0-4V7h2c1.1 0 2 .9 2 2s-.9 2-2 2H9z"/>
                         </svg>
@@ -166,21 +166,21 @@
                 </div>
                 
                 <!-- Editable Content Area -->
-                <div 
-                    id="editor" 
-                    contenteditable="true" 
-                    class="border border-gray-300 border-t-0 rounded-b-lg p-6 min-h-[400px] max-h-[600px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+                <div
+                    id="editor"
+                    contenteditable="true"
+                    class="border border-gray-300 dark:border-gray-600 border-t-0 rounded-b-lg p-6 min-h-[400px] max-h-[600px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-900 dark:text-gray-100"
                     placeholder="Start writing your trading notes here..."
                 ></div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex justify-end items-center mt-6 pt-6 border-t border-gray-200">
+            <div class="flex justify-end items-center mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                 <div class="flex gap-3">
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onclick="clearEditor()"
-                        class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                        class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
                     >
                         Clear
                     </button>
@@ -197,17 +197,17 @@
     </div>
 
     <!-- Entries List -->
-    <div class="mt-8 bg-white rounded-xl shadow-lg p-8">
+    <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold text-gray-900">Recent Entries</h3>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Recent Entries</h3>
             
             <!-- Per Page Selector -->
             <div class="flex items-center gap-2">
-                <label for="perPage" class="text-sm text-gray-600">Show:</label>
-                <select 
-                    id="perPage" 
+                <label for="perPage" class="text-sm text-gray-600 dark:text-gray-400">Show:</label>
+                <select
+                    id="perPage"
                     onchange="changePerPage(this.value)"
-                    class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white"
                 >
                     <option value="5" {{ request('per_page') == 5 ? 'selected' : '' }}>5</option>
                     <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
@@ -220,7 +220,7 @@
         <div id="entriesList">
             @forelse($entries as $entry)
                 <div style="margin-bottom: 12px;">
-                    <a href="{{ route('diary.show', $entry->id) }}" class="block border border-gray-200 rounded-lg p-5 hover:border-orange-400 hover:shadow-md transition-all">
+                    <a href="{{ route('diary.show', $entry->id) }}" class="block border border-gray-200 dark:border-gray-700 rounded-lg p-5 hover:border-orange-400 dark:hover:border-orange-600 hover:shadow-md transition-all dark:bg-gray-700/50">
                         <div class="flex justify-between items-start gap-4">
                             <div class="flex-1 min-w-0">
                                 {{-- Date badge --}}
@@ -236,13 +236,13 @@
                                         General Note
                                     </div>
                                 @endif
-                                <div class="text-xs text-gray-400 mb-1">
+                                <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">
                                     Written {{ $entry->created_at->format('M j, Y \a\t g:i A') }}
                                     @if($entry->created_at != $entry->updated_at)
                                         <span>(edited)</span>
                                     @endif
                                 </div>
-                                <div class="text-gray-700 entry-preview text-sm">
+                                <div class="text-gray-700 dark:text-gray-300 entry-preview text-sm">
                                     {{ Str::limit(strip_tags($entry->content), 200) }}
                                 </div>
                             </div>
@@ -262,7 +262,7 @@
         <!-- Pagination -->
         @if($entries->hasPages())
             <div class="mt-6 flex justify-between items-center">
-                <div class="text-sm text-gray-600">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
                     Showing {{ $entries->firstItem() }} to {{ $entries->lastItem() }} of {{ $entries->total() }} entries
                 </div>
                 
@@ -273,7 +273,7 @@
                             Previous
                         </span>
                     @else
-                        <a href="{{ $entries->previousPageUrl() }}" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <a href="{{ $entries->previousPageUrl() }}" class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                             Previous
                         </a>
                     @endif
@@ -285,7 +285,7 @@
                                 {{ $page }}
                             </span>
                         @else
-                            <a href="{{ $url }}" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                            <a href="{{ $url }}" class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                                 {{ $page }}
                             </a>
                         @endif
@@ -293,7 +293,7 @@
                     
                     {{-- Next Page Link --}}
                     @if ($entries->hasMorePages())
-                        <a href="{{ $entries->nextPageUrl() }}" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <a href="{{ $entries->nextPageUrl() }}" class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                             Next
                         </a>
                     @else

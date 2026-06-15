@@ -5,7 +5,7 @@
 @section('content')
 <!-- Success/Error Messages -->
 @if(session('success'))
-    <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
+    <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg flex items-center">
         <svg class="w-5 h-5 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
@@ -14,20 +14,20 @@
 @endif
 
 <div class="mb-8">
-    <h2 class="text-3xl font-bold text-gray-900">Settings</h2>
-    <p class="text-gray-600 mt-1">Manage your account settings and preferences</p>
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Settings</h2>
+    <p class="text-gray-600 dark:text-gray-400 mt-1">Manage your account settings and preferences</p>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
     <!-- Sidebar Navigation -->
     <div class="lg:col-span-2">
-        <nav class="bg-white rounded-lg shadow-md p-4">
+        <nav class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
             <ul class="space-y-2">
                 <li>
-                    <a href="#profile" 
+                    <a href="#profile"
                        onclick="showSection('profile'); return false;"
                        id="nav-profile"
-                       class="flex items-center px-4 py-3 rounded-lg transition-colors bg-orange-50 text-orange-600 font-medium">
+                       class="flex items-center px-4 py-3 rounded-lg transition-colors bg-orange-50 dark:bg-orange-900/20 text-orange-600 font-medium">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
@@ -38,7 +38,7 @@
                     <a href="#trade-settings" 
                        onclick="showSection('trade-settings'); return false;"
                        id="nav-trade-settings"
-                       class="flex items-center px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
+                       class="flex items-center px-4 py-3 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                         </svg>
@@ -49,7 +49,7 @@
                     <a href="#balances" 
                        onclick="showSection('balances'); return false;"
                        id="nav-balances"
-                       class="flex items-center px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-50">
+                       class="flex items-center px-4 py-3 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -64,11 +64,11 @@
     <div class="lg:col-span-10">
         <!-- Profile Section -->
         <div id="section-profile" class="settings-section">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                 <!-- Profile Information -->
-                <div class="border-b border-gray-200 p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Profile Information</h3>
-                    <p class="text-sm text-gray-600">Update your account's profile information and email address.</p>
+                <div class="border-b border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Profile Information</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Update your account's profile information and email address.</p>
                 </div>
 
                 <form action="{{ route('settings.profile.update') }}" method="POST" class="p-6">
@@ -78,14 +78,14 @@
                     <div class="space-y-6">
                         <!-- Name -->
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
                             <input 
                                 type="text" 
                                 id="name" 
                                 name="name" 
                                 value="{{ old('name', auth()->user()->name) }}"
                                 required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 @error('name') border-red-500 @enderror"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white @error('name') border-red-500 @enderror"
                             >
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -94,14 +94,14 @@
 
                         <!-- Email -->
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
                             <input 
                                 type="email" 
                                 id="email" 
                                 name="email" 
                                 value="{{ old('email', auth()->user()->email) }}"
                                 required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 @error('email') border-red-500 @enderror"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white @error('email') border-red-500 @enderror"
                             >
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -121,10 +121,10 @@
             </div>
 
             <!-- Update Password -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden mt-6">
-                <div class="border-b border-gray-200 p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Update Password</h3>
-                    <p class="text-sm text-gray-600">Ensure your account is using a long, random password to stay secure.</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mt-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Update Password</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Ensure your account is using a long, random password to stay secure.</p>
                 </div>
 
                 <form action="{{ route('settings.password.update') }}" method="POST" class="p-6">
@@ -134,13 +134,13 @@
                     <div class="space-y-6">
                         <!-- Current Password -->
                         <div>
-                            <label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                            <label for="current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Password</label>
                             <input 
                                 type="password" 
                                 id="current_password" 
                                 name="current_password" 
                                 required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 @error('current_password') border-red-500 @enderror"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white @error('current_password') border-red-500 @enderror"
                             >
                             @error('current_password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -149,34 +149,34 @@
 
                         <!-- New Password -->
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Password</label>
                             <input 
                                 type="password" 
                                 id="password" 
                                 name="password" 
                                 required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 @error('password') border-red-500 @enderror"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white @error('password') border-red-500 @enderror"
                             >
                             @error('password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
-                            <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Must be at least 8 characters</p>
                         </div>
 
                         <!-- Confirm Password -->
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
                             <input 
                                 type="password" 
                                 id="password_confirmation" 
                                 name="password_confirmation" 
                                 required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white"
                             >
                         </div>
 
                         <div class="flex justify-end">
-                            <button 
+                            <button
                                 type="submit"
                                 class="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
                             >
@@ -190,24 +190,24 @@
 
         <!-- Trade Settings Section -->
         <div id="section-trade-settings" class="settings-section hidden">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="border-b border-gray-200 p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Trade Setup Tags</h3>
-                    <p class="text-sm text-gray-600">Create and manage tags to categorize your trades by setup type.</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <div class="border-b border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Trade Setup Tags</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Create and manage tags to categorize your trades by setup type.</p>
                 </div>
 
                 <div class="p-6">
                     <!-- Add Tag Form -->
-                    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <h4 class="text-sm font-semibold text-gray-900 mb-4">Add New Tag</h4>
+                    <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Add New Tag</h4>
                         <div class="flex gap-3">
                             <div class="flex-1">
-                                <input 
-                                    type="text" 
-                                    id="tag-name" 
+                                <input
+                                    type="text"
+                                    id="tag-name"
                                     placeholder="Tag name (e.g., Breakout)"
                                     maxlength="100"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
                                 >
                             </div>
                             <div>
@@ -230,15 +230,15 @@
                     <!-- Tags List -->
                     <div id="tags-list" class="space-y-3">
                         @forelse($tags as $tag)
-                            <div id="tag-{{ $tag->id }}" class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
+                            <div id="tag-{{ $tag->id }}" class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-gray-300 dark:hover:border-gray-600 transition-colors dark:bg-gray-800/50">
                                 <div class="flex items-center gap-3 flex-1">
                                     <div 
                                         class="w-8 h-8 rounded-md border border-gray-300 flex-shrink-0"
                                         style="background-color: {{ $tag->color }}"
                                     ></div>
                                     <div class="flex-1">
-                                        <span class="font-medium text-gray-900">{{ $tag->name }}</span>
-                                        <span class="ml-2 text-sm text-gray-500">({{ $tag->positions()->count() }} trades)</span>
+                                        <span class="font-medium text-gray-900 dark:text-white">{{ $tag->name }}</span>
+                                        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">({{ $tag->positions()->count() }} trades)</span>
                                     </div>
                                 </div>
                                 <div class="flex gap-2">
@@ -271,36 +271,36 @@
 
         <!-- Balances Section -->
 <div id="edit-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">Edit Tag</h3>
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Edit Tag</h3>
         <input type="hidden" id="edit-tag-id">
         <div class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tag Name</label>
-                <input 
-                    type="text" 
-                    id="edit-tag-name" 
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tag Name</label>
+                <input
+                    type="text"
+                    id="edit-tag-name"
                     maxlength="100"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white"
                 >
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
-                <input 
-                    type="color" 
-                    id="edit-tag-color" 
-                    class="h-10 w-full border border-gray-300 rounded-lg cursor-pointer"
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Color</label>
+                <input
+                    type="color"
+                    id="edit-tag-color"
+                    class="h-10 w-full border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer"
                 >
             </div>
         </div>
         <div class="flex gap-3 mt-6">
-            <button 
+            <button
                 onclick="closeEditModal()"
-                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
                 Cancel
             </button>
-            <button 
+            <button
                 onclick="updateTag()"
                 class="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
             >
@@ -312,16 +312,16 @@
 
         <!-- Balances Section -->
         <div id="section-balances" class="settings-section hidden">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden max-w-2xl">
-                <div class="border-b border-gray-200 p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Account Balances</h3>
-                    <p class="text-sm text-gray-600">Manage your initial balance and track deposits/withdrawals.</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden max-w-2xl">
+                <div class="border-b border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Account Balances</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Manage your initial balance and track deposits/withdrawals.</p>
                 </div>
 
                 <div class="p-6">
                     <!-- Add Balance Form -->
-                    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <h4 class="text-sm font-semibold text-gray-900 mb-4">
+                    <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">
                             @if(!$hasInitialBalance)
                                 Add Initial Balance
                             @else
@@ -333,10 +333,10 @@
                                 <input type="hidden" id="balance-type" value="initial">
                             @else
                                 <div>
-                                    <label for="balance-type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                                    <label for="balance-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type</label>
                                     <select 
                                         id="balance-type"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-800 dark:text-white"
                                     >
                                         <option value="deposit">Deposit</option>
                                         <option value="withdrawal">Withdrawal</option>
@@ -344,33 +344,33 @@
                                 </div>
                             @endif
                             <div>
-                                <label for="balance-amount" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                                <label for="balance-amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
                                 <input 
                                     type="number" 
                                     id="balance-amount" 
                                     placeholder="Enter amount"
                                     step="0.01"
                                     min="0"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-800 dark:text-white"
                                 >
                             </div>
                             <div>
-                                <label for="balance-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                <label for="balance-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
                                 <input 
                                     type="date" 
                                     id="balance-date" 
                                     value="{{ date('Y-m-d') }}"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-800 dark:text-white dark:color-scheme-dark"
                                 >
                             </div>
                             <div>
-                                <label for="balance-description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                                <label for="balance-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description (Optional)</label>
                                 <input 
                                     type="text" 
                                     id="balance-description" 
                                     placeholder="Enter description"
                                     maxlength="255"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
                                 >
                             </div>
                         </div>
@@ -391,7 +391,7 @@
                     <!-- Balances List -->
                     <div class="space-y-3" id="balances-list">
                         @forelse($balances as $balance)
-                            <div class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow" data-balance-id="{{ $balance->id }}">
+                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow" data-balance-id="{{ $balance->id }}">
                                 <div class="flex items-center space-x-4 flex-1">
                                     <div class="flex-shrink-0">
                                         @if($balance->type === 'initial')
@@ -409,10 +409,10 @@
                                         @endif
                                     </div>
                                     <div class="flex-1">
-                                        <p class="text-sm font-semibold text-gray-900">
+                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
                                             ${{ number_format($balance->amount, 2) }}
                                         </p>
-                                        <p class="text-xs text-gray-500">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
                                             {{ $balance->date->format('M d, Y') }}
                                             @if($balance->description)
                                                 • {{ $balance->description }}
@@ -452,36 +452,36 @@
 
 <!-- Edit Tag Modal -->
 <div id="edit-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">Edit Tag</h3>
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Edit Tag</h3>
         <input type="hidden" id="edit-tag-id">
         <div class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tag Name</label>
-                <input 
-                    type="text" 
-                    id="edit-tag-name" 
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tag Name</label>
+                <input
+                    type="text"
+                    id="edit-tag-name"
                     maxlength="100"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:text-white"
                 >
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
-                <input 
-                    type="color" 
-                    id="edit-tag-color" 
-                    class="h-10 w-full border border-gray-300 rounded-lg cursor-pointer"
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Color</label>
+                <input
+                    type="color"
+                    id="edit-tag-color"
+                    class="h-10 w-full border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer"
                 >
             </div>
         </div>
         <div class="flex gap-3 mt-6">
-            <button 
+            <button
                 onclick="closeEditModal()"
-                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
                 Cancel
             </button>
-            <button 
+            <button
                 onclick="updateTag()"
                 class="flex-1 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
             >
@@ -500,8 +500,8 @@
         
         // Remove active state from all nav items
         document.querySelectorAll('nav a').forEach(el => {
-            el.classList.remove('bg-orange-50', 'text-orange-600', 'font-medium');
-            el.classList.add('text-gray-700', 'hover:bg-gray-50');
+            el.classList.remove('bg-orange-50', 'dark:bg-orange-900/20', 'text-orange-600', 'font-medium');
+            el.classList.add('text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-gray-700');
         });
         
         // Show selected section
@@ -509,8 +509,8 @@
         
         // Add active state to selected nav item
         const navItem = document.getElementById('nav-' + section);
-        navItem.classList.add('bg-orange-50', 'text-orange-600', 'font-medium');
-        navItem.classList.remove('text-gray-700', 'hover:bg-gray-50');
+        navItem.classList.add('bg-orange-50', 'dark:bg-orange-900/20', 'text-orange-600', 'font-medium');
+        navItem.classList.remove('text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-gray-700');
     }
 
     // Tag Management Functions

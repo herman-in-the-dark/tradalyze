@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/trades/{position}', [TradesController::class, 'update'])->name('trades.update');
     Route::delete('/trades/{position}', [TradesController::class, 'destroy'])->name('trades.destroy');
     Route::post('/trades/bulk-delete', [TradesController::class, 'bulkDestroy'])->name('trades.bulk-delete');
+    Route::post('/trades/bulk-tag', [TradesController::class, 'bulkTag'])->name('trades.bulk-tag');
     
     Route::get('/diary', [DiaryController::class, 'index'])->name('diary');
     Route::post('/diary', [DiaryController::class, 'store'])->name('diary.store');
