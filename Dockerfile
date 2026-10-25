@@ -1,7 +1,16 @@
-FROM php:8.4-fpm-bullseye
+FROM php:8.4-fpm-bookworm
 
 # Set working directory
 WORKDIR /var/www/html
+
+
+# Copy your local sources file into the image
+COPY docker/sources.list /etc/apt/sources.list
+
+# Update the package index
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install system dependencies (no nodejs/npm from apt — we'll install Node 20 below)
 RUN apt-get update && apt-get install -y \
