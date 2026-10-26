@@ -15,6 +15,7 @@ class Fill extends Model
         'price',
         'fees',
         'order_id',
+        'brokerage_order_id',
         'exec_id',
     ];
 

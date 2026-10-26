@@ -12,6 +12,7 @@ class Position extends Model
 {
     protected $fillable = [
         'instrument_id',
+        'brokerage_order_id',
         'open_datetime',
         'close_datetime',
         'quantity',

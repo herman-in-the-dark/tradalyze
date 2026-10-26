@@ -8,11 +8,13 @@ use App\Models\Position;
 use App\Models\PositionScreenshot;
 use App\Models\Instrument;
 use App\Models\Fill;
+use App\Models\TradeImportLog;
 use App\Models\TradeTag;
 use App\Services\FifoPositionService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class TradesController extends Controller
 {
@@ -28,9 +30,19 @@ class TradesController extends Controller
         $daysPerPage = $request->get('per_page', 10);
         $sortBy      = $request->get('sort_by', 'close_datetime');
         $sortOrder   = $request->get('sort_order', 'desc');
+        $strategyLegCounts = Position::query()
+            ->whereNotNull('brokerage_order_id')
+            ->whereHas('instrument', fn($query) => $query->where('user_id', auth()->id()))
+            ->whereHas('instrument', fn($query) => $query->where('asset_type', 'OPT'))
+            ->selectRaw('brokerage_order_id, COUNT(DISTINCT instrument_id) as leg_count')
+            ->groupBy('brokerage_order_id')
+            ->havingRaw('COUNT(DISTINCT instrument_id) > 1')
+            ->get()
+            ->pluck('leg_count', 'brokerage_order_id');
+        $multiLegOrderIds = $strategyLegCounts->keys()->all();
 
         // ── Shared filter closure ────────────────────────────────────────────
-        $applyFilters = function ($q) use ($request) {
+        $applyFilters = function ($q) use ($request, $multiLegOrderIds) {
             $q->whereHas('instrument', function ($iq) {
                 $iq->where('user_id', auth()->id());
             });
@@ -43,12 +55,17 @@ class TradesController extends Controller
                 elseif ($request->state === 'closed') $q->whereNotNull('close_datetime');
             }
             if ($request->filled('asset_type')) {
-                $q->whereHas('instrument', fn($iq) =>
-                    $iq->where('asset_type', $request->asset_type));
+                $assetType = strtoupper($request->asset_type);
+                $q->whereHas('instrument', fn($iq) => $iq->where('asset_type', $assetType));
             }
             if ($request->filled('put_call')) {
-                $q->whereHas('instrument', fn($iq) =>
-                    $iq->where('put_call', $request->put_call));
+                $optionType = strtoupper($request->put_call);
+                if ($optionType === 'STRATEGY') {
+                    $q->whereIn('brokerage_order_id', $multiLegOrderIds);
+                } elseif (in_array($optionType, ['CALL', 'PUT', 'C', 'P'], true)) {
+                    $putCall = ['CALL' => 'C', 'PUT' => 'P'][$optionType] ?? $optionType;
+                    $q->whereHas('instrument', fn($iq) => $iq->where('put_call', $putCall));
+                }
             }
             if ($request->filled('opened_from'))
                 $q->whereDate('open_datetime', '>=', $request->opened_from);
@@ -142,6 +159,14 @@ class TradesController extends Controller
         }
 
         $allPositions = $positionsQuery->get();
+        $strategyPositions = Position::with('instrument')
+            ->whereIn('brokerage_order_id', $allPositions->pluck('brokerage_order_id')->filter()->unique())
+            ->whereHas('instrument', fn($query) => $query->where('user_id', auth()->id()))
+            ->get()
+            ->groupBy('brokerage_order_id');
+        $strategyNames = $strategyPositions->mapWithKeys(fn($legs, $orderId) => [
+            $orderId => app(\App\Services\OptionStrategyClassifier::class)->classify($legs),
+        ]);
 
         // ── Step 3: group and preserve page order ────────────────────────────
         $rawGroups = collect();
@@ -194,7 +219,17 @@ class TradesController extends Controller
                 ->pluck('total_commission', 'trade_date');
         }
 
-        return view('trades', compact('groupedPositions', 'daysPaginator', 'totalDays', 'userTags', 'diaryEntryByDate', 'commissionsByDate'));
+        return view('trades', compact(
+            'groupedPositions',
+            'daysPaginator',
+            'totalDays',
+            'userTags',
+            'diaryEntryByDate',
+            'commissionsByDate',
+            'multiLegOrderIds',
+            'strategyNames',
+            'strategyLegCounts'
+        ));
     }
 
     public function create()
@@ -231,6 +266,23 @@ class TradesController extends Controller
             ->get();
 
         return view('trades.show', compact('position', 'availableTags'));
+    }
+
+    public function showStrategy(string $brokerageOrderId)
+    {
+        $positions = Position::with(['instrument', 'tags'])
+            ->where('brokerage_order_id', $brokerageOrderId)
+            ->whereHas('instrument', fn($query) => $query->where('user_id', auth()->id()))
+            ->orderBy('open_datetime')
+            ->get();
+
+        abort_if($positions->isEmpty(), 404);
+
+        return view('trades.strategy', [
+            'brokerageOrderId' => $brokerageOrderId,
+            'positions' => $positions,
+            'realizedPnl' => $positions->sum('realized_pnl'),
+        ]);
     }
 
     public function update(Request $request, Position $position)
@@ -439,58 +491,225 @@ class TradesController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $file = $request->file('csv_file');
+        $contentLength = (int) $request->server('CONTENT_LENGTH', 0);
+        $postLimit = $this->parseIniSize((string) ini_get('post_max_size'));
+        if ($contentLength > 0 && $postLimit > 0 && $contentLength > $postLimit) {
+            $message = 'The upload exceeds the server request limit. Please use a smaller CSV file.';
+            $this->recordImportError('csv', $message, null, $contentLength);
+
+            return back()->with('error', $message)->withErrors(['csv_file' => $message]);
+        }
+
+        if ($file && !$file->isValid()) {
+            $message = 'The CSV upload failed: ' . $file->getErrorMessage();
+            $this->recordImportError(
+                'csv',
+                $message,
+                $file->getClientOriginalName(),
+                $file->getSize() ?: null
+            );
+
+            return back()->with('error', $message)->withErrors(['csv_file' => $message]);
+        }
+
+        $validator = Validator::make($request->all(), [
             'broker' => 'required|string',
             'csv_file' => 'required|file|mimes:csv,txt|max:10240', // 10MB max
         ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $message = $errors[0] ?? 'Please select a valid CSV file.';
+            $this->recordImportError(
+                'csv',
+                $message,
+                $file?->getClientOriginalName(),
+                $file?->getSize() ?: null,
+                $errors
+            );
+
+            return back()
+                ->withErrors($validator)
+                ->withInput($request->except('csv_file'))
+                ->with('error', $message);
+        }
+
+        $broker = $request->input('broker');
+        $file = $request->file('csv_file');
+        $importLog = TradeImportLog::create([
+            'user_id' => auth()->id(),
+            'source' => 'csv',
+            'status' => 'started',
+            'file_name' => $file->getClientOriginalName(),
+            'file_size_bytes' => $file->getSize(),
+            'message' => 'CSV import started.',
+        ]);
 
         try {
-            $broker = $request->input('broker');
-            $file = $request->file('csv_file');
-            
             \Log::info('CSV Upload started', ['broker' => $broker, 'file' => $file->getClientOriginalName()]);
             
             // Parse CSV based on broker
             if ($broker === 'interactive_broker') {
                 $result = $this->parseInteractiveBrokerCSV($file);
-                
+
+                if ($result['fills'] === 0 && $result['duplicates'] === 0) {
+                    $message = 'No trades were imported. Check that the CSV contains valid IBKR execution rows.';
+                    $importLog->update([
+                        'status' => 'error',
+                        'message' => $message,
+                        'details' => ['errors' => $result['errors']],
+                    ]);
+                    Log::error('CSV import produced no fills', [
+                        'import_log_id' => $importLog->id,
+                        'file' => $file->getClientOriginalName(),
+                        'skipped_rows' => $result['skipped_rows'],
+                    ]);
+
+                    return back()->with('error', $message);
+                }
+
+                $message = $result['fills'] > 0
+                    ? "Successfully imported {$result['fills']} fills for {$result['instruments']} instruments. Created {$result['positions']} positions."
+                    : "No new fills imported; {$result['duplicates']} executions were already in your journal.";
+                if ($result['skipped_rows'] > 0) {
+                    $message .= " Skipped {$result['skipped_rows']} invalid rows.";
+                }
+
+                $importLog->update([
+                    'status' => 'success',
+                    'fills_imported' => $result['fills'],
+                    'instruments_created' => $result['instruments'],
+                    'positions_created' => $result['positions'],
+                    'message' => $message,
+                    'details' => ['errors' => $result['errors']],
+                ]);
                 \Log::info('CSV Upload completed', $result);
-                
-                return redirect()->route('trades')->with('success', 
-                    "Successfully imported {$result['fills']} fills for {$result['instruments']} instruments. Created {$result['positions']} positions.");
+
+                return redirect()->route('trades')->with('success', $message);
             }
-            
+
+            $message = 'Unsupported broker format.';
+            $importLog->update(['status' => 'error', 'message' => $message]);
             return back()->with('error', 'Unsupported broker format.');
             
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            $message = 'Error processing CSV: ' . $e->getMessage();
+            $importLog->update([
+                'status' => 'error',
+                'message' => $message,
+                'details' => ['errors' => [$e->getMessage()]],
+            ]);
             \Log::error('CSV Upload failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return back()->with('error', 'Error processing CSV: ' . $e->getMessage());
+            return back()->with('error', $message);
         }
+    }
+
+    private function recordImportError(
+        string $source,
+        string $message,
+        ?string $fileName = null,
+        ?int $fileSize = null,
+        array $errors = []
+    ): void {
+        TradeImportLog::create([
+            'user_id' => auth()->id(),
+            'source' => $source,
+            'status' => 'error',
+            'file_name' => $fileName,
+            'file_size_bytes' => $fileSize,
+            'message' => $message,
+            'details' => ['errors' => $errors ?: [$message]],
+        ]);
+    }
+
+    private function parseIniSize(string $size): int
+    {
+        $size = trim($size);
+        if ($size === '') {
+            return 0;
+        }
+
+        $unit = strtolower(substr($size, -1));
+        $value = (int) $size;
+
+        return match ($unit) {
+            'g' => $value * 1024 * 1024 * 1024,
+            'm' => $value * 1024 * 1024,
+            'k' => $value * 1024,
+            default => $value,
+        };
     }
 
     private function parseInteractiveBrokerCSV($file)
     {
-        $csvData = array_map('str_getcsv', file($file->getPathname()));
-        $headers = array_shift($csvData); // Remove header row
+        $lines = file($file->getPathname());
+        if ($lines === false || $lines === []) {
+            throw new \RuntimeException('The uploaded CSV file is empty or could not be read.');
+        }
+
+        $csvData = array_map('str_getcsv', $lines);
+        $headers = array_map('trim', array_shift($csvData));
+        if (isset($headers[0])) {
+            $headers[0] = preg_replace('/^\xEF\xBB\xBF/', '', $headers[0]);
+        }
+        $requiredHeaders = ['Symbol', 'AssetClass', 'TradeID', 'DateTime', 'Buy/Sell', 'Quantity', 'TradePrice'];
+        $missingHeaders = array_diff($requiredHeaders, $headers);
+        if ($missingHeaders !== []) {
+            throw new \RuntimeException(
+                'CSV is missing required IBKR columns: ' . implode(', ', $missingHeaders) . '.'
+            );
+        }
         
         $fillsCount = 0;
+        $duplicatesCount = 0;
+        $skippedRows = 0;
+        $rowErrors = [];
         $instrumentsCreated = 0;
         $processedInstruments = collect();
 
         DB::beginTransaction();
         
         try {
-            foreach ($csvData as $row) {
+            foreach ($csvData as $index => $row) {
                 // Skip empty rows
                 if (empty(array_filter($row))) {
                     continue;
                 }
                 
+                if (count($row) !== count($headers)) {
+                    $skippedRows++;
+                    if (count($rowErrors) < 20) {
+                        $rowErrors[] = 'Row ' . ($index + 2) . ' has a different number of columns than the header.';
+                    }
+                    continue;
+                }
+
                 // Create associative array from CSV row
                 $data = array_combine($headers, $row);
                 
                 // Skip if Symbol is empty
                 if (empty($data['Symbol'])) {
+                    $skippedRows++;
+                    if (count($rowErrors) < 20) {
+                        $rowErrors[] = 'Row ' . ($index + 2) . ' is missing a symbol.';
+                    }
+                    continue;
+                }
+
+                $execId = trim((string) $data['TradeID']);
+                if ($execId === '') {
+                    $skippedRows++;
+                    if (count($rowErrors) < 20) {
+                        $rowErrors[] = 'Row ' . ($index + 2) . ' is missing TradeID.';
+                    }
+                    continue;
+                }
+                $fillTimestamp = strtotime((string) $data['DateTime']);
+                if ($fillTimestamp === false) {
+                    $skippedRows++;
+                    if (count($rowErrors) < 20) {
+                        $rowErrors[] = 'Row ' . ($index + 2) . ' has an invalid DateTime.';
+                    }
                     continue;
                 }
                 
@@ -584,20 +803,20 @@ class TradesController extends Controller
                 }
                 
                 // Check for duplicate fills by exec_id
-                $execId = trim($data['TradeID']);
-                if (Fill::where('exec_id', $execId)->exists()) {
+                $brokerageOrderId = trim((string) ($data['BrokerageOrderID'] ?? ''));
+                $existingFill = Fill::where('exec_id', $execId)->first();
+                if ($existingFill) {
+                    if (($existingFill->brokerage_order_id === null || $existingFill->brokerage_order_id === '')
+                        && $brokerageOrderId !== '') {
+                        $existingFill->update(['brokerage_order_id' => $brokerageOrderId]);
+                    }
                     \Log::info('Skipping duplicate fill', ['exec_id' => $execId]);
+                    $duplicatesCount++;
                     continue; // Skip duplicate
                 }
                 
                 // Parse datetime with error handling
-                $fillDatetime = null;
-                try {
-                    $fillDatetime = date('Y-m-d H:i:s', strtotime($data['DateTime']));
-                } catch (\Exception $e) {
-                    \Log::warning('Invalid datetime', ['datetime' => $data['DateTime'], 'symbol' => $cleanSymbol]);
-                    continue; // Skip this fill if datetime is invalid
-                }
+                $fillDatetime = date('Y-m-d H:i:s', $fillTimestamp);
                 
                 // Create fill record
                 Fill::create([
@@ -608,6 +827,7 @@ class TradesController extends Controller
                     'price' => (float)$data['TradePrice'],
                     'fees' => abs((float)($data['IBCommission'] ?? 0)),
                     'order_id' => !empty($data['TradeID']) ? trim($data['TradeID']) : null,
+                    'brokerage_order_id' => $brokerageOrderId !== '' ? $brokerageOrderId : null,
                     'exec_id' => $execId,
                 ]);
                 
@@ -628,6 +848,9 @@ class TradesController extends Controller
                 'fills' => $fillsCount,
                 'instruments' => $instrumentsCreated,
                 'positions' => $positionsCount,
+                'duplicates' => $duplicatesCount,
+                'skipped_rows' => $skippedRows,
+                'errors' => $rowErrors,
             ];
             
         } catch (\Exception $e) {
@@ -835,12 +1058,25 @@ class TradesController extends Controller
         $user = auth()->user();
         $flexToken = $request->input('flex_token', $user->ib_flex_token);
         $queryId = $request->input('query_id', $user->ib_query_id);
+        $importLog = TradeImportLog::create([
+            'user_id' => $user->id,
+            'source' => 'flex',
+            'status' => 'started',
+            'message' => 'Flex import started.',
+        ]);
 
         // Validate that we have credentials
         if (empty($flexToken) || empty($queryId)) {
+            $message = 'Please provide both Flex Token and Query ID in settings first.';
+            $importLog->update([
+                'status' => 'error',
+                'message' => $message,
+                'details' => ['errors' => [$message]],
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Please provide both Flex Token and Query ID in settings first.'
+                'message' => $message
             ], 422);
         }
 
@@ -877,13 +1113,19 @@ class TradesController extends Controller
             $importResult = $flexService->importReport($flexToken, $queryId);
             
             if (!$importResult['success']) {
+                $message = $importResult['message'] ?? $importResult['error'];
+                $importLog->update([
+                    'status' => 'error',
+                    'message' => $message,
+                    'details' => ['errors' => [$message]],
+                ]);
                 Log::error('Auto Import: Failed to retrieve report', [
                     'error' => $importResult['error']
                 ]);
                 
                 return response()->json([
                     'success' => false,
-                    'message' => $importResult['message'] ?? $importResult['error']
+                    'message' => $message
                 ], 500);
             }
 
@@ -933,13 +1175,28 @@ class TradesController extends Controller
                 'tagged_positions' => $taggedCount
             ]));
 
+            $message = "Successfully imported {$result['fills']} fills for {$result['instruments']} instruments. Created {$result['positions']} positions.";
+            $importLog->update([
+                'status' => 'success',
+                'fills_imported' => $result['fills'],
+                'instruments_created' => $result['instruments'],
+                'positions_created' => $result['positions'],
+                'message' => $message,
+                'details' => ['tagged_positions' => $taggedCount],
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message' => "Successfully imported {$result['fills']} fills for {$result['instruments']} instruments. Created {$result['positions']} positions.",
+                'message' => $message,
                 'data' => $result
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            $importLog->update([
+                'status' => 'error',
+                'message' => 'Error during auto import: ' . $e->getMessage(),
+                'details' => ['errors' => [$e->getMessage()]],
+            ]);
             Log::error('Auto Import: Exception occurred', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()

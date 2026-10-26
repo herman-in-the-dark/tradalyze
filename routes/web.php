@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TradesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DiaryController;
+use App\Http\Controllers\TradeImportLogController;
 
 // Home Route (Public landing page)
 Route::get('/', function () {
@@ -31,10 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/trades', [TradesController::class, 'index'])->name('trades');
     Route::get('/trades/create', [TradesController::class, 'create'])->name('trades.create');
+    Route::get('/trade-import-logs', [TradeImportLogController::class, 'index'])->name('trade-import-logs.index');
     Route::post('/trades', [TradesController::class, 'store'])->name('trades.store');
     Route::post('/trades/manual', [TradesController::class, 'storeManual'])->name('trades.store.manual');
     Route::post('/trades/save-broker-credentials', [TradesController::class, 'saveBrokerCredentials'])->name('trades.save-broker-credentials');
     Route::post('/trades/auto-import', [TradesController::class, 'autoImport'])->name('trades.auto-import');
+    Route::get('/trades/strategy/{brokerageOrderId}', [TradesController::class, 'showStrategy'])->name('trades.strategy');
     Route::get('/trades/{position}', [TradesController::class, 'show'])->name('trades.show');
     Route::patch('/trades/{position}', [TradesController::class, 'update'])->name('trades.update');
     Route::delete('/trades/{position}', [TradesController::class, 'destroy'])->name('trades.destroy');
@@ -64,4 +67,3 @@ Route::middleware('auth')->group(function () {
     Route::post('/trades/{position}/screenshots', [TradesController::class, 'storeScreenshot'])->name('trades.screenshots.store');
     Route::delete('/trades/{position}/screenshots/{screenshot}', [TradesController::class, 'destroyScreenshot'])->name('trades.screenshots.destroy');
 });
-

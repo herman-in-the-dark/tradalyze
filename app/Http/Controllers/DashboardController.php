@@ -17,16 +17,36 @@ class DashboardController extends Controller
         ->whereNotNull('close_datetime')
         ->whereNotNull('realized_pnl')
         ->get();
-        
+
+        $multiLegOrderIds = Position::query()
+            ->whereNotNull('brokerage_order_id')
+            ->whereHas('instrument', fn($query) => $query->where('user_id', auth()->id()))
+            ->whereHas('instrument', fn($query) => $query->where('asset_type', 'OPT'))
+            ->selectRaw('brokerage_order_id, COUNT(DISTINCT instrument_id) as leg_count')
+            ->groupBy('brokerage_order_id')
+            ->havingRaw('COUNT(DISTINCT instrument_id) > 1')
+            ->pluck('brokerage_order_id')
+            ->all();
+
+        // Count fills matched to one IBKR opening order as a single strategy.
+        $closedStrategies = $closedPositions
+            ->groupBy(fn($position) => in_array($position->brokerage_order_id, $multiLegOrderIds, true)
+                ? 'order:' . $position->brokerage_order_id
+                : 'position:' . $position->id)
+            ->map(fn($legs) => (object) [
+                'realized_pnl' => $legs->sum('realized_pnl'),
+                'close_datetime' => $legs->max('close_datetime'),
+            ]);
+
         // Calculate statistics
-        $totalTrades = $closedPositions->count();
-        $winningTrades = $closedPositions->where('realized_pnl', '>', 0)->count();
-        $losingTrades = $closedPositions->where('realized_pnl', '<', 0)->count();
+        $totalTrades = $closedStrategies->count();
+        $winningTrades = $closedStrategies->where('realized_pnl', '>', 0)->count();
+        $losingTrades = $closedStrategies->where('realized_pnl', '<', 0)->count();
         $winRate = $totalTrades > 0 ? round(($winningTrades / $totalTrades) * 100, 2) : 0;
         
         // Calculate profit/loss totals
-        $netProfit = $closedPositions->where('realized_pnl', '>', 0)->sum('realized_pnl');
-        $netLoss = abs($closedPositions->where('realized_pnl', '<', 0)->sum('realized_pnl'));
+        $netProfit = $closedStrategies->where('realized_pnl', '>', 0)->sum('realized_pnl');
+        $netLoss = abs($closedStrategies->where('realized_pnl', '<', 0)->sum('realized_pnl'));
         
         // Calculate total commissions from all fills for user's instruments (for display purposes)
         $totalCommissions = \App\Models\Fill::whereHas('instrument', function($query) {
@@ -114,7 +134,7 @@ class DashboardController extends Controller
         $avgLoser  = $losingTrades  > 0 ? round($netLoss  / $losingTrades,  2) : 0;
 
         // Consecutive win/loss streaks
-        $sortedPositions = $closedPositions->sortBy('close_datetime')->values();
+        $sortedPositions = $closedStrategies->sortBy('close_datetime')->values();
         $currentStreak   = 0;
         $maxWinStreak    = 0;
         $maxLossStreak   = 0;
@@ -165,9 +185,14 @@ class DashboardController extends Controller
                 $q->whereNotNull('realized_pnl');
             }])
             ->get()
-            ->map(function($tag) {
-                $total = $tag->positions->count();
-                $wins  = $tag->positions->where('realized_pnl', '>', 0)->count();
+            ->map(function($tag) use ($multiLegOrderIds) {
+                $strategies = $tag->positions
+                    ->groupBy(fn($position) => in_array($position->brokerage_order_id, $multiLegOrderIds, true)
+                        ? 'order:' . $position->brokerage_order_id
+                        : 'position:' . $position->id)
+                    ->map(fn($legs) => $legs->sum('realized_pnl'));
+                $total = $strategies->count();
+                $wins  = $strategies->filter(fn($pnl) => $pnl > 0)->count();
                 return [
                     'name'     => $tag->name,
                     'color'    => $tag->color,
@@ -175,7 +200,7 @@ class DashboardController extends Controller
                     'wins'     => $wins,
                     'losses'   => $total - $wins,
                     'win_rate' => $total > 0 ? round(($wins / $total) * 100) : 0,
-                    'pnl'      => round($tag->positions->sum('realized_pnl'), 2),
+                    'pnl'      => round($strategies->sum(), 2),
                 ];
             })
             ->filter(fn($t) => $t['total'] > 0)

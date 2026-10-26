@@ -18,7 +18,19 @@
         <svg class="w-5 h-5 mr-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <span>{{ session('error') }}</span>
+        <div class="flex-1">
+            <p>{{ session('error') }}</p>
+            @if($errors->any())
+                <ul class="mt-2 list-inside list-disc text-sm">
+                    @foreach($errors->all() as $validationError)
+                        <li>{{ $validationError }}</li>
+                    @endforeach
+                </ul>
+            @endif
+            <a href="{{ route('trade-import-logs.index', ['status' => 'error']) }}" class="mt-2 inline-block text-sm font-semibold underline">
+                View import errors
+            </a>
+        </div>
     </div>
 @endif
 
@@ -465,9 +477,10 @@
                     </h4>
                     <p class="text-xs text-blue-800 dark:text-blue-300 mb-2">Your CSV file should contain the following structure:</p>
                     <ul class="text-xs text-blue-700 dark:text-blue-400 list-disc list-inside space-y-1">
-                        <li>File format details will be defined soon</li>
-                        <li>Make sure your CSV is properly formatted</li>
                         <li>First row should contain column headers</li>
+                        <li>IBKR execution columns include Symbol, AssetClass, TradeID, DateTime, Buy/Sell, Quantity, and TradePrice</li>
+                        <li>Include BrokerageOrderID to group fills from the same order into one strategy</li>
+                        <li>For options, include Expiry, Strike, Put/Call, and Multiplier</li>
                     </ul>
                 </div>
 

@@ -185,6 +185,8 @@ LOG_LEVEL=error
 3. Select Interactive Broker format
 4. Upload the CSV file
 
+CSV uploads are limited to 10 MB. Import attempts and validation or row-processing errors are available from **Import Logs** in the sidebar.
+
 **Auto Import:**
 1. Configure your IB credentials in Settings
 2. Go to **Add Trade → Auto Import Trades**
@@ -199,7 +201,7 @@ To use the Auto Import feature:
       3. Create a new Flex Query with the following configuration:
          - **Name your query:** Any descriptive name
          - **Sections list:** Select "Trades"
-         - **Fields:** Select all fields under Trades and click Save
+         - **Fields:** Select all fields under Trades, including **BrokerageOrderID**, and click Save
          - **Delivery Configuration:**
            - Models: Optional
            - Format: CSV
@@ -221,6 +223,8 @@ To use the Auto Import feature:
 6. In Tradalyze, go to **Add Trade → Auto Import Trades** tab
 7. Enter your Flex Token and Query ID > Save Credentials
 8. Click **Import Trades**
+
+Trades with the same `BrokerageOrderID` are shown together as one multi-leg strategy in the trade journal and are counted as one trade in dashboard performance statistics. The Flex Query must include the `BrokerageOrderID` field for this grouping to be available.
 
 ### View Analytics
 

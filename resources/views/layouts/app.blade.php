@@ -59,6 +59,16 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('trade-import-logs.index') }}"
+                           class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('trade-import-logs.*') ? 'bg-orange-600 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}"
+                           title="Import Logs">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-4 8h4m-4 4h4m-8-4h.01M9 17h.01"></path>
+                            </svg>
+                            <span class="sidebar-text ml-3">Import Logs</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('diary') }}"
                            class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('diary') ? 'bg-orange-600 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}"
                            title="Diary">

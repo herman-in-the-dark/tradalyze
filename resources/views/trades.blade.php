@@ -142,10 +142,11 @@
                         <option value="">All Types</option>
                         <option value="OPT" {{ request('asset_type') == 'OPT' ? 'selected' : '' }}>Options</option>
                         <option value="STK" {{ request('asset_type') == 'STK' ? 'selected' : '' }}>Stocks</option>
+                        <option value="FUT" {{ request('asset_type') == 'FUT' ? 'selected' : '' }}>Futures</option>
                     </select>
                 </div>
 
-                <!-- Option Type (CALL/PUT) -->
+                <!-- Option Type -->
                 <div>
                     <label for="put_call" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Option Type</label>
                     <select 
@@ -156,6 +157,7 @@
                         <option value="">All Options</option>
                         <option value="CALL" {{ request('put_call') == 'CALL' ? 'selected' : '' }}>CALL</option>
                         <option value="PUT" {{ request('put_call') == 'PUT' ? 'selected' : '' }}>PUT</option>
+                        <option value="STRATEGY" {{ request('put_call') == 'STRATEGY' ? 'selected' : '' }}>Strategy</option>
                     </select>
                 </div>
 
@@ -313,13 +315,17 @@
         $isOpen          = $dateKey === 'open';
         $groupId         = 'grp-' . str_replace('-', '', $dateKey);
         $totalPnl        = $dayPositions->whereNotNull('realized_pnl')->sum('realized_pnl');
-        $closedPositions = $dayPositions->filter(fn($p) => $p->realized_pnl !== null);
-        $winCount        = $closedPositions->filter(fn($p) => $p->realized_pnl > 0)->count();
-        $lossCount       = $closedPositions->filter(fn($p) => $p->realized_pnl < 0)->count();
-        $tradeCount      = $dayPositions->count();
+        $dayStrategies   = $dayPositions->groupBy(fn($p) => in_array($p->brokerage_order_id, $multiLegOrderIds, true)
+            ? 'order:' . $p->brokerage_order_id
+            : 'position:' . $p->id);
+        $closedStrategies = $dayStrategies->map(fn($legs) => $legs->whereNotNull('realized_pnl')->sum('realized_pnl'))
+            ->filter(fn($pnl, $key) => $dayStrategies[$key]->every(fn($leg) => $leg->realized_pnl !== null));
+        $winCount        = $closedStrategies->filter(fn($pnl) => $pnl > 0)->count();
+        $lossCount       = $closedStrategies->filter(fn($pnl) => $pnl < 0)->count();
+        $tradeCount      = $dayStrategies->count();
         $totalVolume     = $dayPositions->sum(fn($p) => abs((float) $p->quantity));
-        $grossProfit     = $closedPositions->filter(fn($p) => $p->realized_pnl > 0)->sum('realized_pnl');
-        $grossLoss       = $closedPositions->filter(fn($p) => $p->realized_pnl < 0)->sum('realized_pnl');
+        $grossProfit     = $closedStrategies->filter(fn($pnl) => $pnl > 0)->sum();
+        $grossLoss       = $closedStrategies->filter(fn($pnl) => $pnl < 0)->sum();
         $winRate         = $tradeCount > 0 ? round(($winCount / $tradeCount) * 100, 2) : 0;
         $dayCommissions  = $isOpen ? 0 : (float)($commissionsByDate[$dateKey] ?? 0);
         $grossPnl        = $totalPnl + $dayCommissions;
@@ -332,7 +338,13 @@
             $profitFactor = '--';
         }
 
-        $sortedForChart = $dayPositions->filter(fn($p) => $p->realized_pnl !== null)->sortBy('open_datetime');
+        $sortedForChart = $dayStrategies
+            ->filter(fn($legs) => $legs->every(fn($leg) => $leg->realized_pnl !== null))
+            ->map(fn($legs) => (object) [
+                'open_datetime' => $legs->min('open_datetime'),
+                'realized_pnl' => $legs->sum('realized_pnl'),
+            ])
+            ->sortBy('open_datetime');
         $chartPnl = [0]; $chartLabels = ['']; $cumPnl = 0;
         foreach ($sortedForChart as $cp) {
             $cumPnl += (float) $cp->realized_pnl;
@@ -452,9 +464,10 @@
                                        onchange="selectAllInDay(this, '{{ $groupId }}')">
                             </th>
                             <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap">Open time</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap">Close time</th>
                             <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider"></th>
                             <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Instrument</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Position</th>
                             <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap">Net P&amp;L</th>
                             <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap">Net ROI</th>
                             <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap">Realized R-Multiple</th>
@@ -464,38 +477,82 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-50 dark:divide-gray-700">
-                        @foreach($dayPositions as $position)
+                        @foreach($dayStrategies as $strategyPositions)
                         @php
+                            $position = $strategyPositions->first();
+                            $brokerageOrderId = $position->brokerage_order_id;
+                            $isMultiLegStrategy = in_array($brokerageOrderId, $multiLegOrderIds, true);
+                            $strategyPnl = $strategyPositions->whereNotNull('realized_pnl')->sum('realized_pnl');
+                            $strategyClosed = $strategyPositions->every(fn($leg) => $leg->realized_pnl !== null);
+                            $strategyOpen = $strategyPositions->contains(fn($leg) => $leg->isOpen());
+                            $strategySymbols = $strategyPositions
+                                ->map(fn($leg) => strtoupper($leg->instrument->underlying_symbol ?: $leg->instrument->symbol))
+                                ->unique()
+                                ->values();
+                            $strategyCostBasis = $strategyPositions->sum(fn($leg) => abs((float) $leg->cost_basis));
+                            $strategyTags = $strategyPositions->flatMap(fn($leg) => $leg->tags)->unique('id');
+                            $strategyTypeLabels = $strategyPositions->flatMap(function($leg) {
+                                return match ($leg->instrument->asset_type) {
+                                    'OPT' => ['OPT', $leg->instrument->put_call === 'C' ? 'CALL' : 'PUT'],
+                                    'STK' => ['STK'],
+                                    'FUT' => ['FUT'],
+                                    default => [$leg->instrument->asset_type],
+                                };
+                            });
+                            if ($isMultiLegStrategy) {
+                                $strategyTypeLabels->push('SPREAD');
+                            }
+                            $strategyTypeLabels = $strategyTypeLabels->unique()->values();
+                            $positionDescriptions = $strategyPositions
+                                ->groupBy('instrument_id')
+                                ->map(function($legs) {
+                                    $leg = $legs->first();
+                                    $instrument = $leg->instrument;
+                                    $quantity = (float) $legs->sum(fn($item) => (float) $item->quantity);
+                                    $quantityLabel = rtrim(rtrim(number_format(abs($quantity), 2, '.', ''), '0'), '.');
+                                    $signedQuantity = ($quantity > 0 ? '+' : ($quantity < 0 ? '-' : '')) . $quantityLabel;
+
+                                    if ($instrument->asset_type === 'OPT') {
+                                        $strike = rtrim(rtrim(number_format((float) $instrument->strike, 2, '.', ''), '0'), '.');
+                                        return [
+                                            'label' => $signedQuantity . ' ' . $strike . ' ' . ($instrument->put_call === 'C' ? 'Call' : 'Put'),
+                                            'color' => $quantity < 0 ? 'text-red-600' : 'text-green-600',
+                                        ];
+                                    }
+
+                                    if ($instrument->asset_type === 'STK') {
+                                        return [
+                                            'label' => $signedQuantity . ' shares',
+                                            'color' => 'text-gray-700 dark:text-gray-300',
+                                        ];
+                                    }
+
+                                    return [
+                                        'label' => $signedQuantity . ' ' . $instrument->symbol,
+                                        'color' => 'text-gray-700 dark:text-gray-300',
+                                    ];
+                                })
+                                ->values();
+                            $optionLegQuantities = $strategyPositions
+                                ->filter(fn($leg) => $leg->instrument->asset_type === 'OPT')
+                                ->groupBy('instrument_id')
+                                ->map(fn($legs) => abs((float) $legs->sum(fn($leg) => (float) $leg->quantity)));
+                            $optionContractCount = $optionLegQuantities->isNotEmpty()
+                                ? $optionLegQuantities->min()
+                                : null;
+                            $optionContractLabel = $optionContractCount !== null
+                                ? rtrim(rtrim(number_format($optionContractCount, 2, '.', ''), '0'), '.') .
+                                    ' ' . ($optionContractCount === 1.0 ? 'contract' : 'contracts')
+                                : null;
+                            $strategyName = $isMultiLegStrategy
+                                ? ($strategyNames->get($brokerageOrderId) ?? 'Multi-leg Option Strategy')
+                                : null;
+                            $strategyCloseTime = $strategyPositions->whereNotNull('close_datetime')->max('close_datetime');
+                            $strategyOpenTime = $strategyPositions->min('open_datetime');
                             $underlyingSymbol = $position->instrument->underlying_symbol ?: $position->instrument->symbol;
-                            if ($isOpen) {
-                                $timeDisplay = $position->open_datetime->format('H:i:s');
-                                $timeIsClosing = false;
-                            } elseif ($position->open_datetime->format('Y-m-d') === $dateKey) {
-                                $timeDisplay = $position->open_datetime->format('H:i:s');
-                                $timeIsClosing = false;
-                            } else {
-                                $timeDisplay = $position->close_datetime ? $position->close_datetime->format('H:i:s') : $position->open_datetime->format('H:i:s');
-                                $timeIsClosing = true;
-                            }
-                            $assetType = $position->instrument->asset_type;
-                            if ($assetType === 'OPT' && $position->instrument->expiry && $position->instrument->strike) {
-                                $strikeVal = (float)$position->instrument->strike;
-                                $strikeStr = $strikeVal == intval($strikeVal) ? number_format(intval($strikeVal)) : number_format($strikeVal, 2);
-                                $putCallLabel = $position->instrument->put_call === 'C' ? 'CALL' : 'PUT';
-                                $instrumentDesc = $position->instrument->expiry->format('m-d-Y') . ' ' . $strikeStr . ' ' . $putCallLabel;
-                            } elseif ($assetType === 'FUT') {
-                                $instrumentDesc = $position->instrument->symbol . ($position->instrument->expiry ? ' ' . $position->instrument->expiry->format('m-d-Y') : '');
-                            } else {
-                                $instrumentDesc = $position->instrument->symbol;
-                            }
-                            if ($position->instrument->put_call === 'C') { $typeLabel = 'CALL'; }
-                            elseif ($position->instrument->put_call === 'P') { $typeLabel = 'PUT'; }
-                            elseif ($assetType === 'STK') { $typeLabel = 'STOCK'; }
-                            elseif ($assetType === 'FUT') { $typeLabel = 'FUT'; }
-                            else { $typeLabel = '--'; }
                             $netRoi = null;
-                            if ($position->isClosed() && $position->cost_basis != 0) {
-                                $netRoi = round(((float)$position->realized_pnl / abs((float)$position->cost_basis)) * 100, 2);
+                            if ($strategyClosed && $strategyCostBasis != 0) {
+                                $netRoi = round(((float)$strategyPnl / $strategyCostBasis) * 100, 2);
                             }
                             $sym = strtoupper($underlyingSymbol);
                             $bhash = array_sum(array_map('ord', str_split($sym)));
@@ -506,41 +563,61 @@
                                 ['bg-indigo-100', 'text-indigo-700'], ['bg-amber-100', 'text-amber-700'],
                             ];
                             $badge = $badgeOptions[$bhash % count($badgeOptions)];
-                            $rowBg = $position->isClosed()
-                                ? ($position->isProfitable() ? 'hover:bg-green-50/50' : ($position->isLoss() ? 'hover:bg-red-50/50' : 'hover:bg-gray-50'))
+                            $rowBg = $strategyClosed
+                                ? ($strategyPnl > 0 ? 'hover:bg-green-50/50' : ($strategyPnl < 0 ? 'hover:bg-red-50/50' : 'hover:bg-gray-50'))
                                 : 'hover:bg-amber-50/40';
+                            $strategyRoute = $isMultiLegStrategy
+                                ? route('trades.strategy', ['brokerageOrderId' => $brokerageOrderId])
+                                : route('trades.show', $position);
                         @endphp
                         <tr class="group cursor-pointer transition-colors {{ $rowBg }}"
-                            data-position-id="{{ $position->id }}"
-                            onclick="window.location='{{ route('trades.show', $position) }}'">
+                            data-position-ids="{{ $strategyPositions->pluck('id')->implode(',') }}"
+                            onclick="window.location='{{ $strategyRoute }}'">
                             <td class="px-3 py-3.5 w-8" onclick="event.stopPropagation()">
                                 <input type="checkbox"
                                        class="trade-checkbox w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer"
-                                       data-position-id="{{ $position->id }}"
+                                       data-position-ids="{{ $strategyPositions->pluck('id')->implode(',') }}"
                                        data-group="{{ $groupId }}"
                                        onchange="toggleRowSelection(this)">
                             </td>
                             <td class="px-4 py-3.5 whitespace-nowrap">
-                                @if($timeIsClosing)
-                                    <span class="text-xs text-gray-400 dark:text-gray-500 italic">(Closed)</span><br>
-                                    <span class="text-sm text-gray-600 dark:text-gray-400 tabular-nums">{{ $timeDisplay }}</span>
+                                <span class="text-sm text-gray-700 dark:text-gray-300 tabular-nums">{{ $strategyOpenTime->format('H:i:s') }}</span>
+                            </td>
+                            <td class="px-4 py-3.5 whitespace-nowrap">
+                                @if($strategyCloseTime)
+                                    <span class="text-sm text-gray-700 dark:text-gray-300 tabular-nums">{{ $strategyCloseTime->format('H:i:s') }}</span>
                                 @else
-                                    <span class="text-sm text-gray-700 dark:text-gray-300 tabular-nums">{{ $timeDisplay }}</span>
+                                    <span class="text-gray-300 dark:text-gray-600">--</span>
                                 @endif
                             </td>
                             <td class="px-4 py-3.5 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $badge[0] }} {{ $badge[1] }}">{{ $sym }}</span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $badge[0] }} {{ $badge[1] }}">{{ $strategySymbols->implode(' + ') }}</span>
                             </td>
-                            <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-gray-700 dark:text-gray-300">{{ $typeLabel }}</td>
-                            <td class="px-4 py-3.5 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">{{ $instrumentDesc }}</td>
+                            <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($strategyTypeLabels as $typeLabel)
+                                        <span class="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 text-xs">{{ $typeLabel }}</span>
+                                    @endforeach
+                                </div>
+                            </td>
+                            <td class="px-4 py-3.5 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">
+                                <div class="flex flex-col gap-1">
+                                    @if($optionContractLabel)
+                                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ $optionContractLabel }}</span>
+                                    @endif
+                                    @foreach($positionDescriptions as $description)
+                                        <span class="{{ $description['color'] }}">{{ $description['label'] }}</span>
+                                    @endforeach
+                                </div>
+                            </td>
                             <td class="px-4 py-3.5 whitespace-nowrap">
-                                @if($position->isClosed())
-                                    <span class="font-bold text-sm tabular-nums {{ $position->isProfitable() ? 'text-green-600' : ($position->isLoss() ? 'text-red-600' : 'text-gray-500') }}">
-                                        {{ $position->isProfitable() ? '+' : ($position->isLoss() ? '-' : '') }}${{ number_format(abs((float)$position->realized_pnl), 2) }}
+                                @if($strategyClosed)
+                                    <span class="font-bold text-sm tabular-nums {{ $strategyPnl > 0 ? 'text-green-600' : ($strategyPnl < 0 ? 'text-red-600' : 'text-gray-500') }}">
+                                        {{ $strategyPnl > 0 ? '+' : ($strategyPnl < 0 ? '-' : '') }}${{ number_format(abs((float)$strategyPnl), 2) }}
                                     </span>
-                                @elseif($isOpen)
+                                @elseif($strategyOpen)
                                     <span class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                                        <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>Open
+                                        <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>{{ $strategyPnl >= 0 ? '+' : '-' }}${{ number_format(abs((float)$strategyPnl), 2) }} · Open
                                     </span>
                                 @else
                                     <span class="text-xs text-gray-400 dark:text-gray-500 italic">pending</span>
@@ -554,10 +631,16 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3.5 whitespace-nowrap text-sm text-gray-300 dark:text-gray-600 text-center">--</td>
-                            <td class="px-4 py-3.5 whitespace-nowrap text-sm text-gray-300 dark:text-gray-600">--</td>
+                            <td class="px-4 py-3.5 whitespace-nowrap text-sm">
+                                @if($isMultiLegStrategy)
+                                    <span class="text-xs font-medium text-indigo-600 dark:text-indigo-400">{{ $strategyName }}</span>
+                                @else
+                                    <span class="text-gray-300 dark:text-gray-600">--</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-3.5 whitespace-nowrap">
                                 <div class="flex flex-wrap items-center gap-1">
-                                    @forelse($position->tags as $tag)
+                                    @forelse($strategyTags as $tag)
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white" style="background-color: {{ $tag->color }}">{{ $tag->name }}</span>
                                     @empty
                                         <span class="w-6 h-6 flex items-center justify-center rounded-full border border-dashed border-gray-300 text-gray-400 hover:border-orange-400 hover:text-orange-500 transition-colors cursor-pointer" title="Add tag">
@@ -836,13 +919,13 @@ const selectedPositionIds = new Set();
 const selectedTagIds      = new Set();
 
 function toggleRowSelection(checkbox) {
-    const id  = checkbox.dataset.positionId;
+    const ids = (checkbox.dataset.positionIds || checkbox.dataset.positionId || '').split(',').filter(Boolean);
     const row = checkbox.closest('tr');
     if (checkbox.checked) {
-        selectedPositionIds.add(id);
+        ids.forEach(id => selectedPositionIds.add(id));
         row.classList.add('bg-orange-50/40', 'ring-1', 'ring-orange-300', 'ring-inset');
     } else {
-        selectedPositionIds.delete(id);
+        ids.forEach(id => selectedPositionIds.delete(id));
         row.classList.remove('bg-orange-50/40', 'ring-1', 'ring-orange-300', 'ring-inset');
     }
     syncDayCheckbox(checkbox.dataset.group);

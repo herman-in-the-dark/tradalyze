@@ -10,6 +10,7 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
+      - .:/var/www/html                     # <--- ADD THIS LINE to sync all your PHP/Blade files instantly
       - ./database:/var/www/html/database
       - ./storage:/var/www/html/storage
     environment:
@@ -23,6 +24,7 @@ services:
       - DB_DATABASE=/var/www/html/database/database.sqlite
       - SESSION_DRIVER=database
       - QUEUE_CONNECTION=database
+      - CACHE_STORE=file
 
 
   # Optional: MySQL database (uncomment if you prefer MySQL over SQLite)

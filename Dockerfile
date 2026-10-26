@@ -37,6 +37,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
 
+# Keep PHP request limits above the application's 10 MB CSV upload limit.
+COPY docker/php-upload.ini /usr/local/etc/php/conf.d/99-upload.ini
+
 # Set default environment variables for standalone container
 # Note: APP_KEY is generated at runtime by entrypoint.sh if not provided
 ENV APP_NAME=Tradalyze \
@@ -47,7 +50,7 @@ ENV APP_NAME=Tradalyze \
     DB_DATABASE=/var/www/html/database/database.sqlite \
     SESSION_DRIVER=database \
     QUEUE_CONNECTION=database \
-    CACHE_STORE=database \
+    CACHE_STORE=file \
     FILESYSTEM_DISK=local
 
 # Get latest Composer

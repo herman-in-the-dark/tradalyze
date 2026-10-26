@@ -71,6 +71,7 @@ class FifoPositionService
 
                     Position::create([
                         'instrument_id' => $instrument->id,
+                        'brokerage_order_id' => $openFill->brokerage_order_id,
                         'open_datetime' => $openFill->datetime,
                         'close_datetime' => null,
                         'quantity'       => $openQty,
@@ -91,6 +92,7 @@ class FifoPositionService
 
                     Position::create([
                         'instrument_id' => $instrument->id,
+                        'brokerage_order_id' => $openFill->brokerage_order_id,
                         'open_datetime' => $openFill->datetime,
                         'close_datetime' => null,
                         'quantity'       => -$openQty, // negative indicates short
@@ -140,6 +142,7 @@ class FifoPositionService
 
             Position::create([
                 'instrument_id'  => $instrument->id,
+                'brokerage_order_id' => $firstBuy['fill']->brokerage_order_id,
                 'open_datetime'  => $firstBuy['fill']->datetime,
                 'close_datetime' => $sellFill->datetime,
                 'quantity'       => $matchQty,
@@ -194,6 +197,7 @@ class FifoPositionService
 
             Position::create([
                 'instrument_id'  => $instrument->id,
+                'brokerage_order_id' => $firstSell['fill']->brokerage_order_id,
                 'open_datetime'  => $firstSell['fill']->datetime,
                 'close_datetime' => $buyFill->datetime,
                 'quantity'       => -$matchQty, // negative indicates short
